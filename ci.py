@@ -356,11 +356,12 @@ def method1(pai,ys):
     return mark(pai,result)
 
 # 随机选择词牌
-def getrandy(n):
+def getrandy(n,bounds=[20,1000]):
     ze = yun["上"]+yun["去"]+yun["入"]
     ping = yun["平"]
     pick = ""
-    while pick == "" or len(lookup(pick)[1])<20:
+    while pick == "" or len(lookup(pick)[1])<bounds[0] or len(lookup(pick)[1])>bounds[1]:
+
         if n%2 == 1:
             pick = random.choice(ping)[0]
         if n%2 == 0:

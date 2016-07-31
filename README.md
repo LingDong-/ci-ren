@@ -39,3 +39,4 @@ Currently generating a poem with python takes around a minute, and with pypy aro
 - Web version with GUI
 - Speed optimization
 - User interaction
+- 对仗
