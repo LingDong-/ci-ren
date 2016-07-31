@@ -4,7 +4,7 @@ Generative Chinese poetry.
 
 ## Overview
 Ci-Ren is a python program for automatically generating Ci, a form of Classical Chinese Poetry.<br><br>
-Using the Markov chain algorithm, the program learns its grammar and vocabulary from a database of poems by Song dynasty poets. It then generates a poem conforming to the tonal rules of Ci using Backtracking algorithm.
+Using the Markov chain algorithm, the program learns its grammar and vocabulary from a database of poems by Song Dynasty poets. It then generates a poem conforming to the tonal rules of Ci using Backtracking algorithm.
 
 
 ## Dependencies
