@@ -37,7 +37,7 @@ def makeyun():
                 nt.append(nl[k:k+3])
             yun[lines[i][0:3]].append(nt)
 
-# 在平水韵里找到一个词的格律
+# 在平水韵里找到一个字的平仄
 def lookup(zi):
     for i in yun.keys():
         for j in yun[i]:
@@ -84,20 +84,6 @@ def classify():
                 j += 1
             poems.append(Poem(sci,currauthor,intro,con.replace("\n","")))
 
-# 整理菜谱
-def classifyCP():
-    sc = list(open("db/cp.txt"))
-    for i in range(1,len(sc)):
-        if sc[i] != "\n":
-            poems.append(Poem("","","",sc[i]))
-
-# 整理党章
-def classifyDZH():
-    sc = list(open("db/dzh.txt"))
-    for i in range(1,len(sc)):
-        if sc[i] != "\n":
-            poems.append(Poem("","","",sc[i],prop=100))
-
 # 一个字符是否是标点符号？
 def ispunc(zi):
     if zi !="，" and zi !="。" and zi !="、" and zi !="；"  and zi !="）":
@@ -115,7 +101,7 @@ def guessnext(zi):
         c = p.content
         for i in range(0,len(c),3):
             if c[i:i+3] == zi:
-                if not ispunc(c[i-3:i]):
+                if not ispunc(c[i+3:i+6]):
                     x =  c[i+3:i+6]
                     if x not in D:
                         D[x] = 0
@@ -355,7 +341,7 @@ def method1(pai,ys):
         result+=nl
     return mark(pai,result)
 
-# 随机选择词牌
+# 随机选择韵脚
 def getrandy(n,bounds=[20,1000]):
     ze = yun["上"]+yun["去"]+yun["入"]
     ping = yun["平"]
