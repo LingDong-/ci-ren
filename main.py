@@ -10,5 +10,5 @@ if __name__ == "__main__":
 
         k = random.choice(cpm.CPM.keys())
         print k
-        print ci.method1(cpm.CPM[k],[ci.getrandy(3),ci.getrandy(4),ci.getrandy(5),ci.getrandy(6)])
+        print ci.write(cpm.CPM[k],[ci.getrandy(3),ci.getrandy(4),ci.getrandy(5),ci.getrandy(6)],-1)
         print "\n"

@@ -14,6 +14,8 @@ lines = list(open("db/psy.txt"))
 poplimit = 40
 
 poems = []
+CT = ""
+
 
 # 一首词的数据类型
 class Poem():
@@ -122,8 +124,24 @@ def guesslast(zi,foo):
                     D[x] += p.prop
     return D
 
+def guesswithpos(zi,pos,dir):
+    D = {}
+    for p in poems:
+        c = p.content
+        for i in range(0,len(c),3):
+            if c[i:i+3] == zi and i > 0:
+                if not ispunc(c[i+dir*3:i+3+dir*3]):
+                    pis = posinsent(c,i+3*dir)
+                    if midsent((pos[0]+(dir+1)/2)%pos[1],pos[1]) == midsent((pis[0]+(-dir+1)/2)%pis[1],pis[1]):
+                        x =  c[i+dir*3:i+3+dir*3]
+                        if x not in D:
+                            D[x] = 0
+                        D[x] += p.prop
+    return D
+
 # 根据一个字猜上一个字，并考虑词语在句子中的位置合理性
 def guesslastwithpos(zi,pos):
+
     D = {}
     for p in poems:
         c = p.content
@@ -282,63 +300,109 @@ def poswithstruct(struct,ind):
         if ind < s:
             return [ind - (s - struct[i]), struct[i]]
 
-# 从后往前填词法
-def method1(pai,ys):
+# 填词
+def write(pai,ys,dir = -1):
     result = ""
     ygs = []
     yg = [[]]
     for y in ys:
         ygs.append(lookup(y)[1])
     usedyg = []
-
+    trial = []
     # backtrack 递归部分
-    def writeci(pai,col):
+    def writeci(pai,col,strict=True):
 
-        if col == -1:
+        #print col, mark(PA,"".join(output))
+        #print "".join(usedyg)
+
+        if col == (len(pai) if dir == 1 else -1):
             return "".join(output)
+        elif output[col] != "":
+            return writeci(pai,col+dir)
         else:
             # 选韵脚
             if int(pai[col])>= 3:
                 yg[0] = ygs[int(pai[col])-3]
-                x = yg[0]
+                if dir == -1:
+                    x = yg[0]
+                elif dir == 1:
+                    sd = sortdict(guesswithpos(output[col-dir],
+                                                poswithstruct(getstruct(PA),col-dir + len(result)/3),dir))
+                    sd = [k for k,v in sd]
+                    x = list(set(sd) & set(yg[0]))
+
             else:
                 # 选字
-                sd = sortdict(guesslastwithpos(output[col+1],
-                                            poswithstruct(getstruct(PA),col+1 + len(result)/3)))
+                sd = sortdict(guesswithpos(output[col-dir],
+                                            poswithstruct(getstruct(PA),col-dir + len(result)/3),dir))
+                #print sd
+
                 nsd = []
                 for ss in sd:
-                    if ss[1] > poplimit/10:
+                    if len(sd) < 5 or (not strict) or ss[1] > poplimit/10:
                         nsd.append(ss)
 
                 x = [k for k,v in nsd]
                 x = x[0:min(len(x),30)]
 
+                #print "".join(x)
             random.shuffle(x)
-
+            #print len(x)
+            #print trial
             for j in range(0,min(len(x),30)):
 
-                if isOK(pai,x[j],col,yg[0],usedyg) and repeatOK(x[j],result,"".join(output),PA):
+                if (not strict) or (isOK(pai,x[j],col,yg[0],usedyg) and repeatOK(x[j],result,"".join(output),PA)):
                     # 填填看
-                    output[col] = x[j]
+                    trial[col] += 1
+                    if dir == 1:
+                        #print trial[col]
+                        #print strict
+                        if trial[col] > 210:
+                            #strict = False
+                            return None
+                        elif trial[col] > 200:
 
-                    solution = writeci(pai,col-1)
+                            strict = False
+                        else:
+                            pass
+                            #strict = True
+                    output[col] = x[j]
+                    #print strict
+                    solution = writeci(pai,col+dir,strict)
                     if (solution != None):
                         return solution
 
-                    # 填不出，回去一个字重新填
+                    if int(pai[col])>= 3 and x[j] in usedyg:
+                        usedyg.remove(x[j])
+                    # 填不出，回去重填
+
                     output[col] = ""
             return None
     PA = pai
 
-    # 把填出来的句子粘到一起
-    for s in splitbyy(pai):
-        output = [""]*len(s)
+    # 填词
 
-        nl = writeci(s,len(s)-1)
+    if dir == -1:
+        for s in splitbyy(pai):
+            output = [""]*(len(s))
+            trial = [0]*(len(s))
+            nl = writeci(s,len(s)-1)
+            if nl == None:
+                return ""
+
+            result+=nl
+    elif dir == 1:
+        #print unmark(pai)
+        trial = [0]*(len(unmark(pai)))
+        output = [""]*(len(unmark(pai)))
+        output[0] = "烂"
+        for i in range(0,len(CT)/3):
+            if i < len(getstruct(pai)):
+                output[sum(getstruct(pai)[0:i])] = CT[i*3:i*3+3]
+        nl = writeci(unmark(pai),0)
         if nl == None:
             return ""
-
-        result+=nl
+        result += nl
     return mark(pai,result)
 
 # 随机选择韵脚
