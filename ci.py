@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import random
-
-
+import os
+import time
 # GLOBAL
+
+_cc = 3
 
 # 四声
 yun = {"平":[],"上":[],"去":[],"入":[]}
@@ -12,6 +14,8 @@ lines = list(open("db/psy.txt"))
 
 # minimum frequency requirement for characters
 poplimit = 40
+resultlimit = 30
+maxtrial = 200
 
 poems = []
 CT = ""
@@ -35,9 +39,9 @@ def makeyun():
             nl = lines[i+1].replace("[","@").replace("]","@").replace("\n","")
             nl = "".join([nl.split("@")[k] for k in range (0, len(nl.split("@")),2)])
             nt = []
-            for k in range(0,len(nl),3):
-                nt.append(nl[k:k+3])
-            yun[lines[i][0:3]].append(nt)
+            for k in range(0,len(nl),_cc):
+                nt.append(nl[k:k+_cc])
+            yun[lines[i][0:_cc]].append(nt)
 
 # 在平水韵里找到一个字的平仄
 def lookup(zi):
@@ -52,9 +56,9 @@ def lookup(zi):
 def linetype(sc,i):
     if "，" in sc[i] and not("。" in sc[i]):
         return "intro"
-    if (len(sc[i])<=3*10 and "全宋词" not in sc[i] and "，" not in sc[i] and "。" not in sc[i]) or ("（" in sc[i] and len(sc[i])<=3*20):
+    if (len(sc[i])<=_cc*10 and "全宋词" not in sc[i] and "，" not in sc[i] and "。" not in sc[i]) or ("（" in sc[i] and len(sc[i])<=_cc*20):
         if sc[i-1] != "\n":
-            if (len(sc[i-1])>3*10 or len(sc[i-1])<=3*3):
+            if (len(sc[i-1])>_cc*10 or len(sc[i-1])<=_cc*3):
                 return "title"
             else:
                 return "intro"
@@ -101,10 +105,10 @@ def guessnext(zi):
     D = {}
     for p in poems:
         c = p.content
-        for i in range(0,len(c),3):
-            if c[i:i+3] == zi:
-                if not ispunc(c[i+3:i+6]):
-                    x =  c[i+3:i+6]
+        for i in range(0,len(c),_cc):
+            if c[i:i+_cc] == zi:
+                if not ispunc(c[i+_cc:i+_cc*2]):
+                    x =  c[i+_cc:i+_cc*2]
                     if x not in D:
                         D[x] = 0
                     D[x] += p.prop
@@ -115,10 +119,10 @@ def guesslast(zi,foo):
     D = {}
     for p in poems:
         c = p.content
-        for i in range(0,len(c),3):
-            if c[i:i+3] == zi and i > 0:
-                if not ispunc(c[i-3:i]):
-                    x =  c[i-3:i]
+        for i in range(0,len(c),_cc):
+            if c[i:i+_cc] == zi and i > 0:
+                if not ispunc(c[i-_cc:i]):
+                    x =  c[i-_cc:i]
                     if x not in D:
                         D[x] = 0
                     D[x] += p.prop
@@ -128,49 +132,33 @@ def guesswithpos(zi,pos,dir):
     D = {}
     for p in poems:
         c = p.content
-        for i in range(0,len(c),3):
-            if c[i:i+3] == zi and i > 0:
-                if not ispunc(c[i+dir*3:i+3+dir*3]):
-                    pis = posinsent(c,i+3*dir)
+        for i in range(0,len(c),_cc):
+            if c[i:i+_cc] == zi and i > 0:
+                if not ispunc(c[i+dir*_cc:i+_cc+dir*_cc]):
+                    pis = posinsent(c,i+_cc*dir)
                     if midsent((pos[0]+(dir+1)/2)%pos[1],pos[1]) == midsent((pis[0]+(-dir+1)/2)%pis[1],pis[1]):
-                        x =  c[i+dir*3:i+3+dir*3]
+                        x =  c[i+dir*_cc:i+_cc+dir*_cc]
                         if x not in D:
                             D[x] = 0
                         D[x] += p.prop
     return D
 
-# 根据一个字猜上一个字，并考虑词语在句子中的位置合理性
-def guesslastwithpos(zi,pos):
-
-    D = {}
-    for p in poems:
-        c = p.content
-        for i in range(0,len(c),3):
-            if c[i:i+3] == zi and i > 0:
-                if not ispunc(c[i-3:i]):
-                    pis = posinsent(c,i-3)
-                    if midsent(pos[0],pos[1]) == midsent((pis[0]+1)%pis[1],pis[1]):
-                        x =  c[i-3:i]
-                        if x not in D:
-                            D[x] = 0
-                        D[x] += p.prop
-    return D
 
 # 从现成词（字符串）中确定某个字在句子中的位置。
 def posinsent(c,ind):
     start = 0
     end = len(c)
-    for i in range(ind,0,-3):
-        if i == 0 or ispunc(c[i-3:i]):
+    for i in range(ind,0,-_cc):
+        if i == 0 or ispunc(c[i-_cc:i]):
             start = i
             break
-    for i in range(ind,len(c),3):
-        if i >= len(c)-1 or ispunc(c[i:i+3]):
+    for i in range(ind,len(c),_cc):
+        if i >= len(c)-1 or ispunc(c[i:i+_cc]):
             end = i
             break
     if end-start <= 0:
         pass
-    return [(ind-start)/3,(end-start)/3]
+    return [(ind-start)/_cc,(end-start)/_cc]
 
 # 根据字在句子中的位置判断他是否处于上下句承接处
 def midsent(x,l):
@@ -195,8 +183,8 @@ def popularity(zi):
     po = 0
     for p in poems:
         c = p.content
-        for i in range(0,len(c),3):
-            if c[i:i+3] == zi:
+        for i in range(0,len(c),_cc):
+            if c[i:i+_cc] == zi:
                 po += 1
     return po
 
@@ -235,21 +223,21 @@ def isOK(pai,z,i,yg,usedyg):
 def repeatOK(zi,result,output,pai):
 
     if zi in output:
-        for i in range(0,len(output),3):
-            if output[i:i+3] == zi:
+        for i in range(0,len(output),_cc):
+            if output[i:i+_cc] == zi:
                 if i != 0 :
                     return False
 
-                l = poswithstruct(getstruct(pai),len(result)/3)[1]
-                if midsent(l-len(output)/3,l):
+                l = poswithstruct(getstruct(pai),len(result)/_cc)[1]
+                if midsent(l-len(output)/_cc,l):
                     return False
 
     if zi in result:
-        for i in range(0,len(result),3):
+        for i in range(0,len(result),_cc):
 
-            if result[i:i+3] == zi:
-                l = poswithstruct(getstruct(pai),len(result)/3)[1]
-                if (not (i == len(result)-3 and l-len(output)/3 == 0)) or (len(result)-i)/3>20:
+            if result[i:i+_cc] == zi:
+                l = poswithstruct(getstruct(pai),len(result)/_cc)[1]
+                if (not (i == len(result)-_cc and l-len(output)/_cc == 0)) or (len(result)-i)/_cc>20:
                     return False
     return True
 
@@ -268,10 +256,15 @@ def mark(pai,ci):
     np = list(pai)
     j = 0
     for i in range(0,len(np)):
-        if np[i] not in [",",".","`","|","*"]:
-            np[i] = ci[j:j+3]
-            j += 3
 
+        if np[i] not in [",",".","`","|","*"]:
+
+            np[i] = ci[j:j+_cc]
+            j += _cc
+        elif ci[j:j+_cc] == "":
+            i = i + 1
+            break
+    np = np[:i]
     np = ("".join(np))
     if "*" in np:
         rep = np.split("*")[0].split(".")[-1]
@@ -302,6 +295,7 @@ def poswithstruct(struct,ind):
 
 # 填词
 def write(pai,ys,dir = -1):
+
     result = ""
     ygs = []
     yg = [[]]
@@ -311,7 +305,9 @@ def write(pai,ys,dir = -1):
     trial = []
     # backtrack 递归部分
     def writeci(pai,col,strict=True):
-
+        time.sleep(0)
+        #_=os.system("clear")
+        #print mark(PA,result+"".join(output))
         #print col, mark(PA,"".join(output))
         #print "".join(usedyg)
 
@@ -327,14 +323,14 @@ def write(pai,ys,dir = -1):
                     x = yg[0]
                 elif dir == 1:
                     sd = sortdict(guesswithpos(output[col-dir],
-                                                poswithstruct(getstruct(PA),col-dir + len(result)/3),dir))
+                                                poswithstruct(getstruct(PA),col-dir + len(result)/_cc),dir))
                     sd = [k for k,v in sd]
                     x = list(set(sd) & set(yg[0]))
 
             else:
                 # 选字
                 sd = sortdict(guesswithpos(output[col-dir],
-                                            poswithstruct(getstruct(PA),col-dir + len(result)/3),dir))
+                                            poswithstruct(getstruct(PA),col-dir + len(result)/_cc),dir))
                 #print sd
 
                 nsd = []
@@ -343,13 +339,13 @@ def write(pai,ys,dir = -1):
                         nsd.append(ss)
 
                 x = [k for k,v in nsd]
-                x = x[0:min(len(x),30)]
+                x = x[0:min(len(x),resultlimit)]
 
                 #print "".join(x)
             random.shuffle(x)
             #print len(x)
             #print trial
-            for j in range(0,min(len(x),30)):
+            for j in range(0,min(len(x),resultlimit)):
 
                 if (not strict) or (isOK(pai,x[j],col,yg[0],usedyg) and repeatOK(x[j],result,"".join(output),PA)):
                     # 填填看
@@ -357,10 +353,10 @@ def write(pai,ys,dir = -1):
                     if dir == 1:
                         #print trial[col]
                         #print strict
-                        if trial[col] > 210:
+                        if trial[col] > maxtrial+10:
                             #strict = False
                             return None
-                        elif trial[col] > 200:
+                        elif trial[col] > maxtrial:
 
                             strict = False
                         else:
@@ -396,9 +392,9 @@ def write(pai,ys,dir = -1):
         trial = [0]*(len(unmark(pai)))
         output = [""]*(len(unmark(pai)))
         output[0] = "烂"
-        for i in range(0,len(CT)/3):
+        for i in range(0,len(CT)/_cc):
             if i < len(getstruct(pai)):
-                output[sum(getstruct(pai)[0:i])] = CT[i*3:i*3+3]
+                output[sum(getstruct(pai)[0:i])] = CT[i*_cc:i*_cc+_cc]
         nl = writeci(unmark(pai),0)
         if nl == None:
             return ""
