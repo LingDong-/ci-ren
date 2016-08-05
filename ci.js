@@ -27,9 +27,21 @@ function makeyun(){
 	}
 }
 
-
+// 在平水韵中找到一个字的平仄
 function lookup(zi){
+    // return an array of keys in yun (as strings)
+    var keys = Object.keys(yun); 
+    for (var i = 0; i < keys.length, i++){
+        var character_sets = yun[keys[i]];
+        for (var j = 0; j < character_sets.length, j ++){
+            characters = character_sets[j];
+            var found = characters.indexOf(zi);
+            if (found > -1){
+                return [i, j];
+            }
+        }
 
+    }
 }
 
 function linetype(sc,i){
