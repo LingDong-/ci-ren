@@ -247,7 +247,7 @@ function getstruct(pai){
 }
 
 function unmark(pai){
-
+    return pai.replace(",","").replace(".","").replace("`","").replace("|","").replace("*","").replace("$","");
 }
 
 function mark(pai,ci){
