@@ -106,7 +106,27 @@ function guesswithpos(zi,pos,dir){
 }
 
 function posinsent(c,ind){
+    start = 0;
+    end = len(c);
 
+    for (var i = ind; i > 0; i -= _cc){
+        if (i == 0 || ispunc(c.substring(i-_cc,i))) {
+            start = i;
+            break;
+        }
+    }
+
+    for (var i = ind; i < c.length; i += _cc){
+        if (i >= len(c)-1 || ispunc(c.substring(i,i+_cc))) {
+            end = i;
+            break;
+        }
+    }
+
+    if (end-start <= 0){
+    }
+        
+    return [Math.floor((ind-start)/_cc),Math.floor((end-start)/_cc)]
 }
 
 function midsent(x,l){
@@ -129,9 +149,9 @@ function midsent(x,l){
     }
     // 01-23
     if (l == 4 and x == 2){
-        return true
+        return true;
     }
-    return false
+    return false;
 }
 
 function popularity(zi){
