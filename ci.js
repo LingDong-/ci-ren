@@ -207,7 +207,35 @@ function popularity(zi){
 }
 
 function isOK(pai,z,i,yg,usedyg){
+    while (lookup(z) == null) {return false};
+    lxj0 = lookup(z)[0];
 
+    if ((lxj0 == "平" && (pai[i] == "1" || pai[i] == "0")) ||
+       (lxj0 != "平" && (pai[i] == "2" || pai[i] == "0")) && popularity(z) > Math.floor(poplimit/2)){
+        return true;
+    }
+       
+
+    if (yg == [] && Math.floor(pai[i]) >= 3 && (
+       (lxj0 == "平" && Math.floor(pai[i])%2 == 1 ) ||
+       (lxj0 != "平" && Math.floor(pai[i])%2 == 0 )
+       ) && popularity(z) > poplimit){
+
+        usedyg.append(z);
+       return true;
+    }
+
+    if (yg != [] && Math.floor(pai[i]) >= 3 &&(
+       (lxj0 == "平" && Math.floor(pai[i])%2 == 1 ) ||
+       (lxj0 != "平" && Math.floor(pai[i])%2 == 0 )
+       ) &&(
+       z in yg
+       ) && (usedyg.indexOf(z) == -1) && popularity(z) > poplimit){
+        usedyg.append(z)
+       return true;
+    }
+
+    return false;
 }
 
 function repeatOK(zi,result,output,pai){
