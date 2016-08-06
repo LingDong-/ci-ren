@@ -240,6 +240,34 @@ function isOK(pai,z,i,yg,usedyg){
 
 function repeatOK(zi,result,output,pai){
 
+    if (output.indexOf(zi) > -1){
+        for (var i = 0; i < output.length; i += _cc){
+            if (output.substring(i,i+_cc) == zi){
+                if (i != 0){
+                    return false;
+                }
+
+                var l = poswithstruct(getstruct(pai),Math.floor(len(result)/_cc))[1];
+                if (midsent(Math.floor(l-len(output)/_cc),l)) {
+                    return false;
+                }
+
+            }
+        }
+    }
+
+    if (result.indexOf(zi) > -1){
+        for (var i = 0; i < result.length; i += _cc){
+            if (result.substring(i, i+_cc) == zi){
+                var l = poswithstruct(getstruct(pai),Math.floor(len(result)/_cc))[1];
+                if ((! (i == len(result)-_cc && Math.floor(l-len(output)/_cc) == 0)) || Math.floor((len(result)-i)/_cc)>20){
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
 }
 
 function getstruct(pai){
