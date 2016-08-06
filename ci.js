@@ -59,8 +59,18 @@ function ispunc(zi){
     return (zi =="，" || zi =="。" || zi =="、" || zi =="；" || zi =="）")
 }
 
-function sortdict(mydict){
+// sort an json object by values, return list of lists
+function sortdict(obj){
+    // get the object into an array
+    var unsorted = [];
+    var keys = Object.keys(obj);
+    for (var i = 0; i < keys.length; i ++){
+        var value = obj[keys[i]];
+        unsorted.push([keys[i], value]);
 
+    }
+    var sorted = unsorted.sort(function(a, b) {return a[1] - b[1];});
+    return sorted;
 }
 
 function guessnext(zi){
@@ -73,7 +83,7 @@ function guesslast(zi,foo){
 
 function guesswithpos(zi,pos,dir){
 
-    D = {}
+    D = {};
 
     var contents = qsc['content'];
 
