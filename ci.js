@@ -330,7 +330,13 @@ function splitbyy(pai){
 }
 
 function poswithstruct(struct,ind){
-
+    var s = 0;
+    for (var i =0; i < struct.length; i ++){
+        s = s + struct[i];
+        if (ind < s){
+            return [ind - (s - struct[i]), struct[i]];
+        }
+    }
 }
 
 // http://stackoverflow.com/questions/894860/set-a-default-parameter-value-for-a-javascript-function
