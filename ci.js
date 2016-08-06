@@ -30,8 +30,15 @@ var Poem = {title : "", author : "", intro : "", content: "", prop: 1}
 
 // load yun json
 function loadyun(){
-    $.getJSON( "ajax/test.json", function(data){
+    $.getJSON( "ajax/yun.json", function(data){
         yun = data;
+    });
+}
+
+// load qsc json
+function loadqsc(){
+    $.getJSON( "ajax/qsc.json", function(data){
+        qsc = data;
     });
 }
 
@@ -53,7 +60,6 @@ function lookup(zi){
 
     }
 }
-
 
 function ispunc(zi){
     return (zi =="，" || zi =="。" || zi =="、" || zi =="；" || zi =="）")
