@@ -20,6 +20,7 @@ maxtrial = 200
 poems = []
 CT = ""
 
+qsc = {"title":[],"intro":[],"content":[],"author":[]}
 
 # 一首词的数据类型
 class Poem():
@@ -68,6 +69,35 @@ def linetype(sc,i):
         if sc[i] != "\n":
             return "content"
     return False
+
+# helper function to export to qsc.json
+def classifytojson():
+    sc = list(open("db/qsc.txt"))
+    currauthor = ""
+    for i in range(1, len(sc)):
+        if linetype(sc,i) == "author":
+            currauthor = sc[i]
+        if linetype(sc,i) == "title":
+            sci = sc[i].split("（")[0].replace("\n","")
+            con = ""
+            intro = ""
+            j = i+1
+            while linetype(sc,j) == "content" or linetype(sc,j) == "intro":
+                if linetype(sc,j) == "intro":
+                    intro += sc[j]
+                if linetype(sc,j) == "content":
+                    con += sc[j]
+                j += 1
+            qsc["author"].append(currauthor)
+            qsc["intro"].append(intro)
+            qsc["content"].append(con.replace("\n",""))
+            qsc["title"].append(sci)
+
+# helper save to json
+def saveDictToJSON(dictionary,name):
+    import json
+    with open(name,'w') as fp:
+        json.dump(dictionary,fp)
 
 # 整理全宋词
 

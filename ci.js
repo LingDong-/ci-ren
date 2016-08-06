@@ -53,14 +53,6 @@ function lookup(zi){
     }
 }
 
-// 分析数据库每一行信息类型
-function linetype(sc,i){
-
-}
-
-function classify(){
-
-}
 
 function ispunc(zi){
     return (zi =="，" || zi =="。" || zi =="、" || zi =="；" || zi =="）")
