@@ -285,10 +285,35 @@ function unmark(pai){
 }
 
 function mark(pai,ci){
+    var np = pai.split("");
+    var j = 0
+    var punclist = [",",".","`","|","*"];
 
+    for (var i = 0; i < np.length, i ++){
+
+        if (punclist.indexOf(np[i]) == -1){
+            np[i] = ci.substring(j,j+_cc);
+            j += _cc;
+        }
+        else if (ci.substring(j,j+_cc) == ""){
+            i = i + 1;
+            break;
+        }       
+    }
+        
+    np = np[:i]
+    np = np.join();
+
+    if (np.indexOf("*") > -1){
+        var rep = np.split("*")[0].split(".")[-1];
+        np = np.replace("*",rep);
+    }
+        
+    np = np.replace(",","，").replace(".","。").replace("`","、").replace("|","\n")
+    return np;
 }
 
-function splitbyy(pai){
+function splitbyy(pai){   
 
 }
 
