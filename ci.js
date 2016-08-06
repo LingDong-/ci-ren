@@ -1,4 +1,5 @@
 var yun;
+var qsc;
 
 var lines = ["","",""]
 
@@ -72,6 +73,36 @@ function guesslast(zi,foo){
 
 function guesswithpos(zi,pos,dir){
 
+    D = {}
+
+    var contents = qsc['content'];
+
+    for (var i = 0; i < contents.length; i ++){
+        c = contents[i];
+
+        for (var j = 0; j < c.length; i += _cc){
+            if (c.substring(i,i+_cc) == zi && j > 0){
+                if (!ispunc( c.substring(i+dir*_cc,i+_cc+dir*_cc))) {
+
+                    pis = posinsent(c,i+_cc*dir)
+
+                    if (midsent((pos[0]+(dir+1)/2)%pos[1],pos[1]) == midsent((pis[0]+(-dir+1)/2)%pis[1],pis[1])) {
+
+                        x =  c.substring(i+dir*_cc,i+_cc+dir*_cc);
+                        
+                        if (Object.keys(D).indexOf(x) == -1){
+                            D[x] = 0;
+                            D[x] += p.prop;
+                        }
+                            
+                    }
+                }
+
+            }
+                
+        }
+    }
+    return D
 }
 
 function posinsent(c,ind){
