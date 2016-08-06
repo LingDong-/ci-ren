@@ -20,7 +20,7 @@ maxtrial = 200
 poems = []
 CT = ""
 
-qsc = {"title":[],"intro":[],"content":[],"author":[]}
+qsc = {"title":[],"intro":[],"content":[],"author":[],"prop":[]}
 
 # 一首词的数据类型
 class Poem():
@@ -92,6 +92,7 @@ def classifytojson():
             qsc["intro"].append(intro)
             qsc["content"].append(con.replace("\n",""))
             qsc["title"].append(sci)
+            qsc["prop"].append(1)
 
 # helper save to json
 def saveDictToJSON(dictionary,name):

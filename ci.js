@@ -103,7 +103,30 @@ function guessnext(zi){
 }
 
 function guesslast(zi,foo){
+    var D = {};
+    var contents = qsc['content'];
 
+    for (var j = 0; j < contents.length; j ++){
+        var c = contents[j];
+        for (var i = 0; i < c.length, i += _cc){
+        
+            if (c.substring(i,i+_cc) == zi && i > 0){
+
+                if (!ispunc(c.substring(i-_cc,i))){
+
+                    x =  c.substring(i-_cc,i);
+                    if (x not in D){
+                        D[x] = 0;
+                    }
+                        
+                    D[x] += p.prop;
+
+                }
+                    
+            }
+        }
+    }
+    return D;
 }
 
 function guesswithpos(zi,pos,dir){
@@ -127,9 +150,9 @@ function guesswithpos(zi,pos,dir){
                         
                         if (Object.keys(D).indexOf(x) == -1){
                             D[x] = 0;
-                            D[x] += p.prop;
-                        }
                             
+                        }
+                        D[x] += p.prop;
                     }
                 }
 
