@@ -74,7 +74,26 @@ function sortdict(obj){
 }
 
 function guessnext(zi){
+    D = {};
+    var contents = qsc['content'];
 
+    for (var j = 0; j < contents.length; j ++){
+        c = contents[j];
+        for (var i = 0; i < c.length, i += _cc){
+            if (c.substring(i,i+_cc) == zi){
+
+                if (!ispunc(c.substring(i+_cc,i+_cc*2))) {
+                    x = c.substring(i+_cc,i+_cc*2);
+                    if (Object.keys(D).indexOf(x) == -1){
+                        D[x] = 0
+                    }
+                    D[x] += p.prop
+                }
+
+            }
+        }
+    }
+    return D
 }
 
 function guesslast(zi,foo){
