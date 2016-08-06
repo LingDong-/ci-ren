@@ -110,7 +110,28 @@ function posinsent(c,ind){
 }
 
 function midsent(x,l){
+    if (x == 0){
+        return true;
+    }
 
+    // 0123-456
+    if (l == 7 and x == 4){
+        return true;
+    }
+    // 01-23-45
+    if (l == 6 and (x == 2 or x == 4){
+        return true;
+    }
+        
+    // 01-234
+    if (l == 5 and x == 2){
+        return true;
+    }
+    // 01-23
+    if (l == 4 and x == 2){
+        return true
+    }
+    return false
 }
 
 function popularity(zi){
