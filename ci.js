@@ -366,8 +366,9 @@ function poswithstruct(struct,ind){
 }
 
 // http://stackoverflow.com/questions/894860/set-a-default-parameter-value-for-a-javascript-function
-function write(pai,ys,dir = -1){
-
+function write(pai,ys,dir){
+    // set up default value of dir
+    dir = typeof dir !== 'undefined' ? dir : -1;
 }
 
 // 随机选择韵脚
