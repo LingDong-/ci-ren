@@ -344,6 +344,29 @@ function write(pai,ys,dir = -1){
 
 }
 
+// 随机选择韵脚
 function getrandy(n,bounds=[20,1000]){
-	
+    var ze = yun["上"]+yun["去"]+yun["入"];
+    var ping = yun["平"]
+    var pick = ""
+    while (pick == "" || lookup(pick)[1].length <bounds[0] || lookup(pick)[1].length >bounds[1]){
+
+        if (n%2 == 1){
+            pick = randomselect(ping)[0]
+        }
+            
+        if (n%2 == 0){
+            pick = randomselect(ze)[0]
+        }
+            
+    }
+
+    return pick;
+}
+
+function randomselect(arr){
+    var rand = Math.random();
+    rand *= arr.length; 
+    rand = Math.floor(rand);
+    return arr[rand];
 }
