@@ -243,7 +243,13 @@ function repeatOK(zi,result,output,pai){
 }
 
 function getstruct(pai){
-
+    var a = pai.replace(",","$").replace(".","$").replace("`","$").replace("|","").replace("*","");
+    var b = a.split("$").slice(0,-1);
+    var result = [];
+    for (var i = 0; i < b.length, i ++){
+        result.push(b[i].length)
+    }
+    return result;
 }
 
 function unmark(pai){
