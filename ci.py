@@ -294,6 +294,7 @@ def poswithstruct(struct,ind):
             return [ind - (s - struct[i]), struct[i]]
 
 # 填词
+# ys: 韵
 def write(pai,ys,dir = -1):
 
     result = ""
@@ -322,6 +323,7 @@ def write(pai,ys,dir = -1):
                 if dir == -1:
                     x = yg[0]
                 elif dir == 1:
+                    #sd：下一个字的合集 
                     sd = sortdict(guesswithpos(output[col-dir],
                                                 poswithstruct(getstruct(PA),col-dir + len(result)/_cc),dir))
                     sd = [k for k,v in sd]
@@ -360,8 +362,8 @@ def write(pai,ys,dir = -1):
 
                             strict = False
                         else:
-                            pass
-                            #strict = True
+                           # pass
+                            strict = True
                     output[col] = x[j]
                     #print strict
                     solution = writeci(pai,col+dir,strict)

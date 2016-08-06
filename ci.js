@@ -1,4 +1,4 @@
-var yun = {ping : [], shang : [], qu : [], ru : []}
+var yun;
 
 var lines = ["","",""]
 
@@ -18,13 +18,20 @@ var Poem = {title : "", author : "", intro : "", content: "", prop: 1}
 // js里可以想办法把平水韵做成json然后导入json
 // js搞txt file感觉不够自然
 // see: http://stackoverflow.com/questions/18366191/import-text-file-using-javascript
-function makeyun(){
-	for (var i = 0; i < lines.length, i++){
-		if ("声" in lines[i] && "：" in lines[i]){
-			// string operations to get rid of comments
-            // append the lines to the yun object 
-		}
-	}
+// function makeyun(){
+// 	for (var i = 0; i < lines.length, i++){
+// 		if ("声" in lines[i] && "：" in lines[i]){
+// 			// string operations to get rid of comments
+//             // append the lines to the yun object 
+// 		}
+// 	}
+// }
+
+// load yun json
+function loadyun(){
+    $.getJSON( "ajax/test.json", function(data){
+        yun = data;
+    });
 }
 
 // 在平水韵中找到一个字的平仄
