@@ -108,18 +108,18 @@ function guesslast(zi,foo){
 
 function guesswithpos(zi,pos,dir){
 
-    D = {};
+    var D = {};
 
     var contents = qsc['content'];
 
     for (var i = 0; i < contents.length; i ++){
-        c = contents[i];
+        var c = contents[i];
 
         for (var j = 0; j < c.length; i += _cc){
             if (c.substring(i,i+_cc) == zi && j > 0){
                 if (!ispunc( c.substring(i+dir*_cc,i+_cc+dir*_cc))) {
 
-                    pis = posinsent(c,i+_cc*dir)
+                    var pis = posinsent(c,i+_cc*dir)
 
                     if (midsent((pos[0]+(dir+1)/2)%pos[1],pos[1]) == midsent((pis[0]+(-dir+1)/2)%pis[1],pis[1])) {
 
@@ -141,8 +141,8 @@ function guesswithpos(zi,pos,dir){
 }
 
 function posinsent(c,ind){
-    start = 0;
-    end = len(c);
+    var start = 0;
+    var end = len(c);
 
     for (var i = ind; i > 0; i -= _cc){
         if (i == 0 || ispunc(c.substring(i-_cc,i))) {
@@ -190,11 +190,11 @@ function midsent(x,l){
 }
 
 function popularity(zi){
-    po = 0
+    var po = 0
     var contents = qsc['content'];
 
     for (var j = 0; j < contents.length; j ++){
-        c = contents[j];
+        var c = contents[j];
 
         for (var i = 0; i < c.length; i += _cc){
             if (c.substring(i,i+_cc) == zi){
