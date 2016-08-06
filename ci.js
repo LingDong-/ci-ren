@@ -114,7 +114,20 @@ function midsent(x,l){
 }
 
 function popularity(zi){
+    po = 0
+    var contents = qsc['content'];
 
+    for (var j = 0; j < contents.length; j ++){
+        c = contents[j];
+
+        for (var i = 0; i < c.length; i += _cc){
+            if (c.substring(i,i+_cc) == zi){
+                po += 1;
+            }
+        }
+                
+    }
+    return po
 }
 
 function isOK(pai,z,i,yg,usedyg){
