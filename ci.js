@@ -314,7 +314,19 @@ function mark(pai,ci){
 }
 
 function splitbyy(pai){   
+    var upai = unmark(pai).split("");
+    var nl = [];
+    var ne = "";
+    for (var i =0; i < upai.length; i ++){
+        var s = upai[i];
+        ne += s;
+        if (Math.floor(s) >= 3){
+            nl.push(ne);
+            ne = "";
+        }
+    }
 
+    return nl;
 }
 
 function poswithstruct(struct,ind){
