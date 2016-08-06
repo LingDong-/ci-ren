@@ -82,6 +82,7 @@ function sortdict(obj){
 function guessnext(zi){
     D = {};
     var contents = qsc['content'];
+    var props = qsc["prop"];
 
     for (var j = 0; j < contents.length; j ++){
         c = contents[j];
@@ -93,7 +94,7 @@ function guessnext(zi){
                     if (Object.keys(D).indexOf(x) == -1){
                         D[x] = 0
                     }
-                    D[x] += p.prop
+                    D[x] += props[i];
                 }
 
             }
@@ -105,6 +106,7 @@ function guessnext(zi){
 function guesslast(zi,foo){
     var D = {};
     var contents = qsc['content'];
+    var props = qsc["prop"];
 
     for (var j = 0; j < contents.length; j ++){
         var c = contents[j];
@@ -119,7 +121,7 @@ function guesslast(zi,foo){
                         D[x] = 0;
                     }
                         
-                    D[x] += p.prop;
+                    D[x] += props[i];
 
                 }
                     
@@ -134,6 +136,7 @@ function guesswithpos(zi,pos,dir){
     var D = {};
 
     var contents = qsc['content'];
+    var props = qsc["prop"];
 
     for (var i = 0; i < contents.length; i ++){
         var c = contents[i];
@@ -152,7 +155,7 @@ function guesswithpos(zi,pos,dir){
                             D[x] = 0;
                             
                         }
-                        D[x] += p.prop;
+                        D[x] += props[i];
                     }
                 }
 
@@ -213,7 +216,7 @@ function midsent(x,l){
 }
 
 function popularity(zi){
-    var po = 0
+    var po = 0;
     var contents = qsc['content'];
 
     for (var j = 0; j < contents.length; j ++){
