@@ -46,10 +46,10 @@ function loadqsc(){
 function lookup(zi){
     // return an array of keys in yun (as strings)
     var keys = Object.keys(yun); 
-    for (var i = 0; i < keys.length, i++){
+    for (var i = 0; i < keys.length; i++){
         var character_sets = yun[keys[i]];
 
-        for (var j = 0; j < character_sets.length, j ++){
+        for (var j = 0; j < character_sets.length; j ++){
             characters = character_sets[j];
             var found = characters.indexOf(zi);
 
@@ -86,7 +86,7 @@ function guessnext(zi){
 
     for (var j = 0; j < contents.length; j ++){
         c = contents[j];
-        for (var i = 0; i < c.length, i += _cc){
+        for (var i = 0; i < c.length; i += _cc){
             if (c.substring(i,i+_cc) == zi){
 
                 if (!ispunc(c.substring(i+_cc,i+_cc*2))) {
@@ -110,14 +110,14 @@ function guesslast(zi,foo){
 
     for (var j = 0; j < contents.length; j ++){
         var c = contents[j];
-        for (var i = 0; i < c.length, i += _cc){
+        for (var i = 0; i < c.length; i += _cc){
         
             if (c.substring(i,i+_cc) == zi && i > 0){
 
                 if (!ispunc(c.substring(i-_cc,i))){
 
                     x =  c.substring(i-_cc,i);
-                    if (x not in D){
+                    if (Object.keys(D).indexOf(x) == -1){
                         D[x] = 0;
                     }
                         
@@ -196,20 +196,20 @@ function midsent(x,l){
     }
 
     // 0123-456
-    if (l == 7 and x == 4){
+    if (l == 7 && x == 4){
         return true;
     }
     // 01-23-45
-    if (l == 6 and (x == 2 or x == 4){
+    if (l == 6 && (x == 2 || x == 4)){
         return true;
     }
         
     // 01-234
-    if (l == 5 and x == 2){
+    if (l == 5 && x == 2){
         return true;
     }
     // 01-23
-    if (l == 4 and x == 2){
+    if (l == 4 && x == 2){
         return true;
     }
     return false;
@@ -300,7 +300,7 @@ function getstruct(pai){
     var a = pai.replace(",","$").replace(".","$").replace("`","$").replace("|","").replace("*","");
     var b = a.split("$").slice(0,-1);
     var result = [];
-    for (var i = 0; i < b.length, i ++){
+    for (var i = 0; i < b.length; i ++){
         result.push(b[i].length)
     }
     return result;
@@ -315,7 +315,7 @@ function mark(pai,ci){
     var j = 0
     var punclist = [",",".","`","|","*"];
 
-    for (var i = 0; i < np.length, i ++){
+    for (var i = 0; i < np.length; i ++){
 
         if (punclist.indexOf(np[i]) == -1){
             np[i] = ci.substring(j,j+_cc);
@@ -327,7 +327,7 @@ function mark(pai,ci){
         }       
     }
         
-    np = np[:i]
+    np = np.slice(0,i);
     np = np.join();
 
     if (np.indexOf("*") > -1){
