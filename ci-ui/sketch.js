@@ -314,7 +314,11 @@ function draw() {
        //noLoop();
       
       C = writePoem();
+<<<<<<< HEAD
       print(C)
+=======
+      drawProgress();
+>>>>>>> origin/ci-js
     }
     //print(flip)
     var im = 0
@@ -455,10 +459,17 @@ function writePoem(){
   K = randomselect(cpmkeys);//"浣溪沙";
   var start = new Date().getTime();
 
+<<<<<<< HEAD
   console.log(K);
   var poem = K + '\n' + write(cpm[K][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1);
   // console.log(poem);
   // console.log("\n");
+=======
+  console.log(k);
+  var poem = k + '\n' + write(cpm[k][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1);
+  console.log(poem);
+  console.log("\n");
+>>>>>>> origin/ci-js
 
   var end = new Date().getTime();
   var time = end - start;
@@ -467,7 +478,11 @@ function writePoem(){
 }
 
 function drawProgress(){
+<<<<<<< HEAD
   //background(0,0,0)
+=======
+  // background(0,0,0)
+>>>>>>> origin/ci-js
 
   //console.log("flip", flip);
   if (flip > -2){
