@@ -14,6 +14,7 @@ var tn = 0
 var slicer = 0
 var bgoto = -1
 var trans = 0
+var cpm = {}
 
 function preload() {
   icon[0] = loadImage("assets/ciren1.png");
@@ -25,6 +26,7 @@ function preload() {
   font[0] = loadFont('assets/HelveticaNeue.otf');
   font[1] = loadFont('assets/Yingxue.ttf');
   font[2] = loadFont('assets/Libian.ttf');
+  cpm = loadJSON('cpm.json')
 }
 
 function setup() {
@@ -153,6 +155,7 @@ function optionbutton(x,y,er,tr,col1){
   if (dist(mouseX,mouseY,x,y) <= er){
     //col1 = color(83,86,82)
     sw = 1.5
+    bgoto = 4
   }
   noFill()
   stroke(col1)
@@ -189,6 +192,26 @@ function cancelbutton(x,y,er,tr,col1){
   
 }
 
+
+function scrollbutton(x,y,er,tr,col1){
+  if (col1 === undefined){col1=color(153,146,142)}
+  var sw = 1
+  if (dist(mouseX,mouseY,x,y) <= er){
+    //col1 = color(83,86,82)
+    sw = 1.5
+  }
+  noFill()
+  stroke(col1)
+  strokeWeight(sw)
+  ellipse(x,y,er*2,er*2);
+  stroke(col1)
+  strokeWeight(sw)
+  noFill()
+  line(x-tr,y-tr,x+tr,y+tr)
+  line(x+tr,y-tr,x-tr,y+tr)
+    
+  
+}
 
 function transtext(tn1,tn2){
   var tn = tn1
@@ -304,16 +327,29 @@ function draw() {
     stroke(240,237,234)
     //rect(width/2-w/2,height/2-40-h/2,w,h)
     
-    fill(93,86,82)
+    fill(93,86,82,-flip*5)
     noStroke()
     textFont(font[2],36)
     text(C.split("\n").slice(0,1).join("\n"),width/2,height/2-150)
     textFont(font[1],24)
     textLeading(50);
+    //print(flip)
     text(C.split("\n").slice(1).join("\n"),width/2,height/2-60)
+    
+    
     replaybutton(width/2-120,min(height/2+150-(flip*4+100)/4,height/2+150),24,11,color(153,146,142,-flip*2))
     copybutton(width/2,  min(height/2+150-(flip*4+200)/4,height/2+150),24,10,color(153,146,142,-flip*2))
     addbutton(width/2+120,min(height/2+150-(flip*4+300)/4,height/2+150),24,11,color(153,146,142,-flip*2))
+  }else if (state == 4){
+    var cpms = Object.keys(cpm)
+    for (var i = 0; i < cpms.length; i++){
+      fill(93,86,82)
+      noStroke()
+      textFont(font[2],24)
+      text(cpms[i].split("").join("\n"),50*i+flip,100)
+      flip -= 0.1
+    }
+    
   }
   
   //print(bgoto)
