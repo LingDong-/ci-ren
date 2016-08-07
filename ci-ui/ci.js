@@ -641,22 +641,22 @@ function updateProgressBar(){
 }
 
 // testing scripts
-$.when(loadyun(), loadqsc(), loadcpm()).done(function(a1, a2, a3, a4){
-    for (var i = 0; i < 1; i ++){
+// $.when(loadyun(), loadqsc(), loadcpm()).done(function(a1, a2, a3, a4){
+//     for (var i = 0; i < 1; i ++){
 
-        var cpmkeys = Object.keys(cpm);
-        var k = randomselect(cpmkeys);
-        // var k = "十六字令";
-        var start = new Date().getTime();
+//         var cpmkeys = Object.keys(cpm);
+//         var k = randomselect(cpmkeys);
+//         // var k = "十六字令";
+//         var start = new Date().getTime();
 
-        console.log(k);
-        console.log(write(cpm[k][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1))
-        console.log("\n");
+//         console.log(k);
+//         console.log(write(cpm[k][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1))
+//         console.log("\n");
         
 
-        var end = new Date().getTime();
-        var time = end - start;
-        console.log('Execution time: ',time);
-    }
-});
+//         var end = new Date().getTime();
+//         var time = end - start;
+//         console.log('Execution time: ',time);
+//     }
+// });
 

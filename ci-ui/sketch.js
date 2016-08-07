@@ -288,6 +288,7 @@ function draw() {
       // progIntID = window.setInterval(drawProgress, 0.1);
       // noLoop();
       C = writePoem();
+      drawProgress();
     }
     //print(flip)
     var im = 0
@@ -427,8 +428,8 @@ function writePoem(){
 
   console.log(k);
   var poem = k + '\n' + write(cpm[k][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1);
-  // console.log(poem);
-  // console.log("\n");
+  console.log(poem);
+  console.log("\n");
 
   var end = new Date().getTime();
   var time = end - start;
@@ -437,7 +438,7 @@ function writePoem(){
 }
 
 function drawProgress(){
-  background(0,0,0)
+  // background(0,0,0)
 
   console.log("flip", flip);
   if (flip > -2){
