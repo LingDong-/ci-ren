@@ -409,6 +409,13 @@ function write(pai,ys,dir){
 
     // backtrack part
     function writeci(pai, col, strict){
+        // flip 一开始设计的时候从 -1 到 -2
+        // -1 是开始，-2是结束
+        // 而用percentage的话0是开始，1是结束
+        // 所以-percentage - 1 就map到flip
+        flip = -mark(PA, result + output.join("")).length / PA.length - 1;
+        console.log(flip);
+        // drawProgress();
         console.log("column count", col);
         // set up default value for strict
         strict = typeof strict !== 'undefined' ? strict : true;
@@ -629,18 +636,23 @@ String.prototype.replaceAll = function(search, replacement) {
     return target.split(search).join(replacement);
 };
 
+function updateProgressBar(){
+    document.getElementById(barid).innerHTML=flip;
+}
+
 // testing scripts
 $.when(loadyun(), loadqsc(), loadcpm()).done(function(a1, a2, a3, a4){
-    for (var i = 0; i < 3; i ++){
+    for (var i = 0; i < 1; i ++){
 
         var cpmkeys = Object.keys(cpm);
         var k = randomselect(cpmkeys);
-        // var k = "南歌子";
+        // var k = "十六字令";
         var start = new Date().getTime();
 
         console.log(k);
         console.log(write(cpm[k][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1))
-        console.log("\n")
+        console.log("\n");
+        
 
         var end = new Date().getTime();
         var time = end - start;

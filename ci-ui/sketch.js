@@ -1,6 +1,4 @@
-var C = "浣溪沙\n\
-正是少留残酒醒，分吴兴佐鼎调停。香红妆映烛荧荧。\n\
-意气与人看鹤舞，衣香七十载刘伶。水横孤映小蜻蜓。"
+var C = "";
 var icon = []
 var font = []
 var bg = []
@@ -15,6 +13,9 @@ var slicer = 0
 var bgoto = -1
 var trans = 0
 var cpm = {}
+var yun = {};
+var qsc = {};
+var progIntID;
 
 function preload() {
   icon[0] = loadImage("assets/ciren1.png");
@@ -26,12 +27,16 @@ function preload() {
   font[0] = loadFont('assets/HelveticaNeue.otf');
   font[1] = loadFont('assets/Yingxue.ttf');
   font[2] = loadFont('assets/Libian.ttf');
-  cpm = loadJSON('cpm.json')
+  cpm = loadJSON('cpm.json');
+  qsc = loadJSON('qsc.json');
+  yun = loadJSON('yun.json');
 }
 
 function setup() {
+
   createCanvas(Math.min(2000,windowWidth), windowHeight)
   background(245,244,243)
+  // noLoop();
 }
 
 function drawmt(){
@@ -233,7 +238,6 @@ function transtext(tn1,tn2){
 
 }
 
-
 function draw() {
   //createCanvas(windowWidth, windowHeight)
   bgoto = -1
@@ -254,6 +258,8 @@ function draw() {
       bgoto = 1
     }
 
+    // load 
+    // redraw();
   }
   
   
@@ -273,10 +279,15 @@ function draw() {
       //  tn = 1
       //  ctxt = ""
       //}
+
       
     }else{
       flip = -1
       state = 2
+      console.log("write poem");
+      // progIntID = window.setInterval(drawProgress, 0.1);
+      // noLoop();
+      C = writePoem();
     }
     //print(flip)
     var im = 0
@@ -293,21 +304,11 @@ function draw() {
       optionbutton(width/2,height/2+150,24,9,color(153,146,142,trsp))
       infobutton(width/2+120,height/2+150,24,11,color(153,146,142,trsp))
     }
+
+    // redraw();
     
   }else if (state == 2){
-    if (flip > -2){
-      flip -= 0.01
-    }else{
-      state = 3
-      counter = 0
-      slicer = 0
-    }
-    image(icon[0], width/2-iscale/2, height/2-iscale/2-120,dWidth=iscale,dHeight=iscale);
-    
-    image(icon[3],sx=0,sy=0,sWidth = 256,sHeight=256*(flip+2),
-    dx=width/2-iscale/2, dy=height/2-iscale/2-120,dWidth=iscale,dHeight=iscale*(flip+2));
-    drawmt()
-    cancelbutton(width/2,height/2+150,24,9)
+    // drawProgress();
       
   }else if (state == 3){
     if (flip > -200){
@@ -384,7 +385,7 @@ function smoothtrans(n,mf){
 }
 
 function mousePressed() {
-  
+  // redraw(5);
   
   if (bgoto != -1){
     
@@ -396,6 +397,7 @@ function mousePressed() {
       ctxt = mtxt[1]
       tn = 1
       state = bgoto
+      
       //flip = -1
       bgoto = -1
       
@@ -415,4 +417,49 @@ function mousePressed() {
     
   } 
   */
+}
+
+function writePoem(){
+  // var cpmkeys = Object.keys(cpm);
+  // var k = randomselect(cpmkeys);
+  var k = "十六字令";
+  var start = new Date().getTime();
+
+  console.log(k);
+  var poem = k + '\n' + write(cpm[k][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1);
+  // console.log(poem);
+  // console.log("\n");
+
+  var end = new Date().getTime();
+  var time = end - start;
+  console.log('Execution time: ',time);
+  return poem;
+}
+
+function drawProgress(){
+  background(0,0,0)
+
+  console.log("flip", flip);
+  if (flip > -2){
+      // flip -= 0.01;
+    }
+  else{
+
+    if (flip == -2){
+      // window.clearInterval(progIntID);
+    }
+    state = 3
+    counter = 0
+    slicer = 0
+  }
+    // update poem
+    print(iscale);
+    image(icon[0], width/2-iscale/2, height/2-iscale/2-120,dWidth=iscale,dHeight=iscale);
+    
+    image(icon[3],sx=0,sy=0,sWidth = 256,sHeight=256*(flip+2),
+    dx=width/2-iscale/2, dy=height/2-iscale/2-120,dWidth=iscale,dHeight=iscale*(flip+2));
+    drawmt()
+    cancelbutton(width/2,height/2+150,24,9)
+
+  // redraw();
 }
