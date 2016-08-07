@@ -402,7 +402,7 @@ function write(pai,ys,dir){
     for (var i = 0; i < ys.length; i ++){
         ygs.push(lookup(ys[i])[1]);
     }
-    console.log("outside ygs",ygs);
+    // console.log("outside ygs",ygs);
     var usedyg = [];
     var trial = [];
     var PA;
@@ -423,18 +423,18 @@ function write(pai,ys,dir){
         }
         
         if (col == cmp_tmp){
-            console.log("accidental return via dir", output);
+            // console.log("accidental return via dir", output);
             return output.join("");
         }
         else if (output[col] != ""){
-            console.log("accidental return via col");
+            // console.log("accidental return via col");
             return writeci(pai,col+dir);
         } else {
-            console.log("column count 2", col);
+            // console.log("column count 2", col);
             if (parseInt(pai[col]) >= 3){
 
                 yg[0] = ygs[parseInt(pai[col]) - 3];
-                console.log("ygs", ygs);
+                // console.log("ygs", ygs);
                 if (dir == -1){
                     x = yg[0];
                 } else if (dir == 1){
@@ -458,12 +458,9 @@ function write(pai,ys,dir){
                     }, []);
                 }
             } else {
-                console.log("sd pre");
-                console.log(guesswithpos(output[col-dir], poswithstruct(getstruct(PA),col-dir + Math.floor(result.length/_cc)),dir));
 
                 sd = sortdict(guesswithpos(output[col-dir], 
                         poswithstruct(getstruct(PA),col-dir + Math.floor(result.length/_cc)),dir));
-                console.log("sd", sd);
                 var nsd = [];
                 for (var i = 0; i < sd.length; i ++){
                     if (sd.length < 5 || (!strict) || sd[i][1] > Math.floor(poplimit/10)){
@@ -488,7 +485,7 @@ function write(pai,ys,dir){
                 // console.log(x[j]);
 
                 if (!strict || (isOK(pai,x[j],col,yg[0],usedyg) && repeatOK(x[j],result,output.join(""),PA))){
-                    console.log("test correct char", x[j]);
+                    // console.log("test correct char", x[j]);
                     trial[col] += 1;
                     if (dir == 1){
 
@@ -503,7 +500,7 @@ function write(pai,ys,dir){
                         }
                     }       
                     output[col] = x[j];
-                    console.log("output",output[output.length-1]);
+                    // console.log("output",output[output.length-1]);
                     var solution = writeci(pai,col+dir,strict);
                     if (solution != undefined){
                         return solution;
@@ -521,10 +518,10 @@ function write(pai,ys,dir){
             return undefined;
         }
     }
-    console.log("PAI", pai);
-    console.log("PA", PA);
+    // console.log("PAI", pai);
+    // console.log("PA", PA);
     PA = pai;
-    console.log("PA", PA);
+    // console.log("PA", PA);
 
     if (dir == -1){
 
@@ -532,7 +529,7 @@ function write(pai,ys,dir){
 
         for (var i = 0; i < s_list.length; i ++){
             var s = s_list[i];
-            console.log(s);
+            // console.log(s);
             output = fillArray("", s.length);
             trial = fillArray(0,s.length);
             nl = writeci(s,s.length-1);
@@ -600,7 +597,7 @@ function shuffle(array) {
 
   // While there remain elements to shuffle...
   while (0 !== currentIndex) {
-    console.log("shuffle")
+    // console.log("shuffle")
     // Pick a remaining element...
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
@@ -620,7 +617,7 @@ function fillArray(value, len) {
   var a = [value];
   while (a.length * 2 <= len) {
     a = a.concat(a);
-    console.log("fillArray");
+    // console.log("fillArray");
   }
   if (a.length < len) a = a.concat(a.slice(0, len - a.length));
   return a;
@@ -636,13 +633,18 @@ String.prototype.replaceAll = function(search, replacement) {
 $.when(loadyun(), loadqsc(), loadcpm()).done(function(a1, a2, a3, a4){
     for (var i = 0; i < 3; i ++){
 
-        // var cpmkeys = Object.keys(cpm);
-        // var k = randomselect(cpmkeys);
-        var k = "南歌子";
+        var cpmkeys = Object.keys(cpm);
+        var k = randomselect(cpmkeys);
+        // var k = "南歌子";
+        var start = new Date().getTime();
 
         console.log(k);
         console.log(write(cpm[k][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1))
         console.log("\n")
+
+        var end = new Date().getTime();
+        var time = end - start;
+        console.log('Execution time: ',time);
     }
 });
 
