@@ -501,7 +501,7 @@ function write(pai,ys,dir){
             if (i < getstruct(pai).length){
                 var sum = getstruct(pai).slice(0, i).reduce(function(a, b) {
                     return a + b;
-                }, 0);)
+                }, 0);
 
                 output[sum] = CT.slice(i* _cc, i* _cc + _cc);
             }
@@ -517,7 +517,8 @@ function write(pai,ys,dir){
 }
 
 // 随机选择韵脚
-function getrandy(n,bounds=[20,1000]){
+function getrandy(n,bounds){
+    bounds = typeof bounds !== 'undefined' ? bounds : [20,1000];
     var ze = yun["上"]+yun["去"]+yun["入"];
     var ping = yun["平"]
     var pick = ""
