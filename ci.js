@@ -10,7 +10,7 @@ var poplimit = 40
 var poems = []
 var CT = ""
 
-var _cc = 3
+var _cc = 1
 
 // minimum frequency requirement for characters
 var poplimit = 40
@@ -64,7 +64,9 @@ function lookup(zi){
             var found = characters.indexOf(zi);
 
             if (found > -1){
-                return [i, j];
+                // console.log("lookup",[keys[i], character_sets[j]])
+                return [keys[i], character_sets[j]];
+
             }
         }
 
@@ -83,9 +85,8 @@ function sortdict(obj){
     for (var i = 0; i < keys.length; i ++){
         var value = obj[keys[i]];
         unsorted.push([keys[i], value]);
-
     }
-    var sorted = unsorted.sort(function(a, b) {return a[1] - b[1];});
+    var sorted = unsorted.sort(function(a, b) {return b[1] - a[1];});
     return sorted;
 }
 
@@ -148,11 +149,12 @@ function guesswithpos(zi,pos,dir){
     var contents = qsc['content'];
     var props = qsc["prop"];
 
-    for (var i = 0; i < contents.length; i ++){
-        var c = contents[i];
+    for (var j = 0; j < contents.length; j ++){
 
-        for (var j = 0; j < c.length; i += _cc){
-            if (c.substring(i,i+_cc) == zi && j > 0){
+        var c = contents[j];
+
+        for (var i = 0; i < c.length; i += _cc){
+            if (c.substring(i,i+_cc) == zi && i > 0){
                 if (!ispunc( c.substring(i+dir*_cc,i+_cc+dir*_cc))) {
 
                     var pis = posinsent(c,i+_cc*dir)
@@ -231,43 +233,55 @@ function popularity(zi){
 
     for (var j = 0; j < contents.length; j ++){
         var c = contents[j];
-
+        //console.log("c:",c);
         for (var i = 0; i < c.length; i += _cc){
+            //console.log("substring:",c.substring(i,i+_cc));
             if (c.substring(i,i+_cc) == zi){
+
                 po += 1;
             }
         }
                 
     }
+    //console.log(po);
     return po
 }
 
 function isOK(pai,z,i,yg,usedyg){
-    while (lookup(z) == null) {return false};
+    while (lookup(z) == undefined) { return false};
     lxj0 = lookup(z)[0];
 
     if ((lxj0 == "平" && (pai[i] == "1" || pai[i] == "0")) ||
        (lxj0 != "平" && (pai[i] == "2" || pai[i] == "0")) && popularity(z) > Math.floor(poplimit/2)){
         return true;
     }
-       
+    // console.log("yg", yg);
+    // console.log('first condition:',yg.length == 0 && parseInt(pai[i]) >= 3);
+    // console.log(parseInt(pai[i]) >= 3);
+    // console.log((lxj0 == "平" && parseInt(pai[i])%2 == 1 ));
+    // console.log((lxj0 != "平" && parseInt(pai[i])%2 == 0 ));
+    // console.log(popularity(z) > poplimit);
 
-    if (yg == [] && Math.floor(pai[i]) >= 3 && (
-       (lxj0 == "平" && Math.floor(pai[i])%2 == 1 ) ||
-       (lxj0 != "平" && Math.floor(pai[i])%2 == 0 )
+    if (yg.length == 0 && parseInt(pai[i]) >= 3 && (
+       (lxj0 == "平" && parseInt(pai[i])%2 == 1 ) ||
+       (lxj0 != "平" && parseInt(pai[i])%2 == 0 )
        ) && popularity(z) > poplimit){
-
-        usedyg.append(z);
+       //console.log("z:",z);
+       usedyg.push(z);
        return true;
     }
 
-    if (yg != [] && Math.floor(pai[i]) >= 3 &&(
-       (lxj0 == "平" && Math.floor(pai[i])%2 == 1 ) ||
-       (lxj0 != "平" && Math.floor(pai[i])%2 == 0 )
-       ) &&(
-       z in yg
-       ) && (usedyg.indexOf(z) == -1) && popularity(z) > poplimit){
-        usedyg.append(z)
+    // console.log("first condition", yg.length != 0 && parseInt(pai[i]) >= 3);
+    // console.log(lxj0 == "平" && parseInt(pai[i])%2 == 1);
+    // console.log((yg.indexOf(z) > -1));
+    // console.log((usedyg.indexOf(z) == -1));
+    // console.log(popularity(z) > poplimit);
+
+    if (yg.length != 0 && parseInt(pai[i]) >= 3 &&(
+       (lxj0 == "平" && parseInt(pai[i])%2 == 1 ) ||
+       (lxj0 != "平" && parseInt(pai[i])%2 == 0 )
+       ) &&(yg.indexOf(z) > -1) && (usedyg.indexOf(z) == -1) && popularity(z) > poplimit){
+        usedyg.push(z)
        return true;
     }
 
@@ -307,7 +321,7 @@ function repeatOK(zi,result,output,pai){
 }
 
 function getstruct(pai){
-    var a = pai.replace(",","$").replace(".","$").replace("`","$").replace("|","").replace("*","");
+    var a = pai.replaceAll(",","$").replaceAll(".","$").replaceAll("`","$").replaceAll("|","").replaceAll("*","");
     var b = a.split("$").slice(0,-1);
     var result = [];
     for (var i = 0; i < b.length; i ++){
@@ -317,7 +331,7 @@ function getstruct(pai){
 }
 
 function unmark(pai){
-    return pai.replace(",","").replace(".","").replace("`","").replace("|","").replace("*","").replace("$","");
+    return pai.replaceAll(",","").replaceAll(".","").replaceAll("`","").replaceAll("|","").replaceAll("*","").replaceAll("$","");
 }
 
 function mark(pai,ci){
@@ -342,15 +356,16 @@ function mark(pai,ci){
 
     if (np.indexOf("*") > -1){
         var rep = np.split("*")[0].split(".")[-1];
-        np = np.replace("*",rep);
+        np = np.replaceAll("*",rep);
     }
         
-    np = np.replace(",","，").replace(".","。").replace("`","、").replace("|","\n")
+    np = np.replaceAll(",","，").replaceAll(".","。").replaceAll("`","、").replaceAll("|","\n")
     return np;
 }
 
 function splitbyy(pai){   
     var upai = unmark(pai).split("");
+
     var nl = [];
     var ne = "";
     for (var i =0; i < upai.length; i ++){
@@ -387,14 +402,20 @@ function write(pai,ys,dir){
     for (var i = 0; i < ys.length; i ++){
         ygs.push(lookup(ys[i])[1]);
     }
+    console.log("outside ygs",ygs);
     var usedyg = [];
     var trial = [];
+    var PA;
+
     // backtrack part
     function writeci(pai, col, strict){
+        console.log("column count", col);
         // set up default value for strict
         strict = typeof strict !== 'undefined' ? strict : true;
-        console.log(col);
-        console.log(mark(PA,output.join("")));
+        // console.log("PA", PA);
+        var x;
+        // console.log("col", col);
+        // console.log("markPA", mark(PA,output.join("")));
 
         var cmp_tmp = pai.length;
         if (dir != 1){
@@ -402,13 +423,18 @@ function write(pai,ys,dir){
         }
         
         if (col == cmp_tmp){
+            console.log("accidental return via dir", output);
             return output.join("");
         }
         else if (output[col] != ""){
+            console.log("accidental return via col");
             return writeci(pai,col+dir);
         } else {
-            if (Math.floor(pai[col]) >= 3){
-                yg[0] = ygs[Math.floor(pai[col]) - 3];
+            console.log("column count 2", col);
+            if (parseInt(pai[col]) >= 3){
+
+                yg[0] = ygs[parseInt(pai[col]) - 3];
+                console.log("ygs", ygs);
                 if (dir == -1){
                     x = yg[0];
                 } else if (dir == 1){
@@ -432,8 +458,12 @@ function write(pai,ys,dir){
                     }, []);
                 }
             } else {
+                console.log("sd pre");
+                console.log(guesswithpos(output[col-dir], poswithstruct(getstruct(PA),col-dir + Math.floor(result.length/_cc)),dir));
+
                 sd = sortdict(guesswithpos(output[col-dir], 
                         poswithstruct(getstruct(PA),col-dir + Math.floor(result.length/_cc)),dir));
+                console.log("sd", sd);
                 var nsd = [];
                 for (var i = 0; i < sd.length; i ++){
                     if (sd.length < 5 || (!strict) || sd[i][1] > Math.floor(poplimit/10)){
@@ -442,24 +472,28 @@ function write(pai,ys,dir){
                 }
 
                 var tmp = [];
-                for (var i = 0; i < sd.length; i ++){
-                    tmp.push(sd[i][0])
+                for (var i = 0; i < nsd.length; i ++){
+                    tmp.push(nsd[i][0])
                 };
-                sd = tmp;
+                x = tmp;
 
                 x = x.slice(0, Math.min(x.length,resultlimit));
             }
-
+            
             x = shuffle(x);
 
-            for (var j = 0; j < Math.min(x.length, resultlimit); j ++){
+            // console.log("x:",x);
 
-                if ((!strict) || (isOK(pai,x[j],col,yg[0],usedyg) && repeatOK(x[j],result,output.join(""),PA))){
+            for (var j = 0; j < Math.min(x.length, resultlimit); j ++){
+                // console.log(x[j]);
+
+                if (!strict || (isOK(pai,x[j],col,yg[0],usedyg) && repeatOK(x[j],result,output.join(""),PA))){
+                    console.log("test correct char", x[j]);
                     trial[col] += 1;
                     if (dir == 1){
 
                         if (trial[col] > maxtrial+10){
-                            return null
+                            return undefined;
                         }
                         else if (trial[col] > maxtrial){
                             strict = false;
@@ -467,28 +501,30 @@ function write(pai,ys,dir){
                         else{
                             strict = true;
                         }
-                            
-                        output[col] = x[j];
-
-                        solution = writeci(pai,col+dir,strict);
-                        if (solution != null){
-                            return solution;
-                        }
-
-                        if (Math.floor(pai[col])>= 3 &&  (usedyg.indexOf(x[j]) > -1)){
-                            var ind = usedyg.indexOf(x[j]);
-                            usedyg.splice(ind,1);
-                        }
-                        
-                        output[col] = "";
+                    }       
+                    output[col] = x[j];
+                    console.log("output",output[output.length-1]);
+                    var solution = writeci(pai,col+dir,strict);
+                    if (solution != undefined){
+                        return solution;
                     }
+
+                    if (parseInt(pai[col])>= 3 &&  (usedyg.indexOf(x[j]) > -1)){
+                        var ind = usedyg.indexOf(x[j]);
+                        usedyg.splice(ind,1);
+                    }
+                    
+                    output[col] = "";
+                    
                 }
             }
-            return null;
+            return undefined;
         }
     }
-
-    var PA = pai;
+    console.log("PAI", pai);
+    console.log("PA", PA);
+    PA = pai;
+    console.log("PA", PA);
 
     if (dir == -1){
 
@@ -496,10 +532,11 @@ function write(pai,ys,dir){
 
         for (var i = 0; i < s_list.length; i ++){
             var s = s_list[i];
+            console.log(s);
             output = fillArray("", s.length);
             trial = fillArray(0,s.length);
             nl = writeci(s,s.length-1);
-            if (nl == null){
+            if (nl == undefined){
                 return ""
             }
             result += nl;
@@ -519,7 +556,7 @@ function write(pai,ys,dir){
             }
         }
         nl = writeci(unmark(pai), 0);
-        if (nl == null){
+        if (nl == undefined){
             return "";
         }
         result += nl;
@@ -563,7 +600,7 @@ function shuffle(array) {
 
   // While there remain elements to shuffle...
   while (0 !== currentIndex) {
-
+    console.log("shuffle")
     // Pick a remaining element...
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
@@ -581,18 +618,27 @@ function shuffle(array) {
 function fillArray(value, len) {
   if (len == 0) return [];
   var a = [value];
-  while (a.length * 2 <= len) a = a.concat(a);
+  while (a.length * 2 <= len) {
+    a = a.concat(a);
+    console.log("fillArray");
+  }
   if (a.length < len) a = a.concat(a.slice(0, len - a.length));
   return a;
 }
 
+// http://stackoverflow.com/questions/1144783/replacing-all-occurrences-of-a-string-in-javascript
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};
 
 // testing scripts
 $.when(loadyun(), loadqsc(), loadcpm()).done(function(a1, a2, a3, a4){
     for (var i = 0; i < 3; i ++){
 
-        var cpmkeys = Object.keys(cpm);
-        var k = randomselect(cpmkeys);
+        // var cpmkeys = Object.keys(cpm);
+        // var k = randomselect(cpmkeys);
+        var k = "南歌子";
 
         console.log(k);
         console.log(write(cpm[k][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1))
