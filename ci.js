@@ -369,6 +369,151 @@ function poswithstruct(struct,ind){
 function write(pai,ys,dir){
     // set up default value of dir
     dir = typeof dir !== 'undefined' ? dir : -1;
+
+    var output = [];
+    var result = "";
+    var ygs = [];
+    var yg = [[]];
+    for (var i = 0; i < ys.length; i ++){
+        ygs.push(lookup(ys[i])[1]);
+    }
+    var usedyg = [];
+    var trial = [];
+    // backtrack part
+    function writeci(pai, col, strict){
+        // set up default value for strict
+        strict = typeof strict !== 'undefined' ? strict : true;
+        
+        var cmp_tmp = pai.length;
+        if (dir != 1){
+            cmp_tmp = -1;
+        }
+        
+        if (col == cmp_tmp){
+            return output.join();
+        }
+        else if (output[col] != ""){
+            return writeci(pai,col+dir);
+        } else {
+            if (Math.floor(pai[col]) >= 3){
+                yg[0] = ygs[Math.floor(pai[col]) - 3];
+                if (dir == -1){
+                    x = yg[0];
+                } else if (dir == 1){
+                    sd = sortdict(guesswithpos(output[col-dir], 
+                        poswithstruct(getstruct(PA),col-dir + Math.floor(result.length/_cc)),dir));
+
+                    var tmp = [];
+                    for (var i = 0; i < sd.length; i ++){
+                        tmp.push(sd[i][0])
+                    };
+                    sd = tmp;
+
+                    // find the intersection of sd and yg; credit to squint: 
+                    // http://stackoverflow.com/questions/11076067/finding-matches-between-multiple-javascript-arrays
+                    var arrays = [sd, yg[0]];
+                    x = arrays.shift().reduce(function(res, v) {
+                        if (res.indexOf(v) === -1 && arrays.every(function(a) {
+                            return a.indexOf(v) !== -1;
+                        })) res.push(v);
+                        return res;
+                    }, []);
+                }
+            } else {
+                sd = sortdict(guesswithpos(output[col-dir], 
+                        poswithstruct(getstruct(PA),col-dir + Math.floor(result.length/_cc)),dir));
+                var nsd = [];
+                for (var i = 0; i < sd.length; i ++){
+                    if (sd.length < 5 || (!strict) || sd[i][1] > Math.floor(poplimit/10)){
+                        nsd.push(sd[i]);
+                    }
+                }
+
+                var tmp = [];
+                for (var i = 0; i < sd.length; i ++){
+                    tmp.push(sd[i][0])
+                };
+                sd = tmp;
+
+                x = x.slice(0, Math.min(x.length,resultlimit));
+            }
+
+            x = shuffle(x);
+
+            for (var j = 0; j < Math.min(x.length, resultlimit); j ++){
+
+                if ((!strict) || (isOK(pai,x[j],col,yg[0],usedyg) && repeatOK(x[j],result,output.join(),PA))){
+                    trial[col] += 1;
+                    if (dir == 1){
+
+                        if (trial[col] > maxtrial+10){
+                            return null
+                        }
+                        else if (trial[col] > maxtrial){
+                            strict = false;
+                        }
+                        else{
+                            strict = true;
+                        }
+                            
+                        output[col] = x[j];
+
+                        solution = writeci(pai,col+dir,strict);
+                        if (solution != null){
+                            return solution;
+                        }
+
+                        if (Math.floor(pai[col])>= 3 &&  (usedyg.indexOf(x[j]) > -1)){
+                            var ind = usedyg.indexOf(x[j]);
+                            usedyg.splice(ind,1);
+                        }
+                        
+                        output[col] = "";
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+    var PA = pai;
+
+    if (dir == -1){
+
+        var s_list = splitbyy(pai);
+
+        for (var i = 0; i < s_list.length; i ++){
+            var s = s_list[i];
+            output = fillArray("", s.length);
+            trial = fillArray(0,s.length);
+            nl = writeci(s,len(s)-1);
+            if (nl == null){
+                return ""
+            }
+            result += nl;
+        }
+
+    } else if (dir == 1){
+        trial = fillArray(0,unmark(pai).length);
+        output = fillArray("", unmark(pai).length);
+        output[0] = "烂";
+        for (var i = 0; i < Math.floor(CT.length / _cc); i ++ ){
+            if (i < getstruct(pai).length){
+                var sum = getstruct(pai).slice(0, i).reduce(function(a, b) {
+                    return a + b;
+                }, 0);)
+
+                output[sum] = CT.slice(i* _cc, i* _cc + _cc);
+            }
+        }
+        nl = writeci(unmark(pai), 0);
+        if (nl == null){
+            return "";
+        }
+        result += nl;
+    }
+    return mark(pai, result);
+
 }
 
 // 随机选择韵脚
@@ -396,4 +541,33 @@ function randomselect(arr){
     rand *= arr.length; 
     rand = Math.floor(rand);
     return arr[rand];
+}
+
+// http://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+// http://stackoverflow.com/questions/12503146/create-an-array-with-same-element-repeated-multiple-times-in-javascript
+function fillArray(value, len) {
+  if (len == 0) return [];
+  var a = [value];
+  while (a.length * 2 <= len) a = a.concat(a);
+  if (a.length < len) a = a.concat(a.slice(0, len - a.length));
+  return a;
 }
