@@ -1,5 +1,6 @@
 var yun;
 var qsc;
+var cpm;
 
 var lines = ["","",""]
 
@@ -30,15 +31,22 @@ var Poem = {title : "", author : "", intro : "", content: "", prop: 1}
 
 // load yun json
 function loadyun(){
-    $.getJSON( "yun.json", function(data){
+    return $.getJSON( "yun.json", function(data){
         yun = data;
     });
 }
 
 // load qsc json
 function loadqsc(){
-    $.getJSON( "qsc.json", function(data){
+    return $.getJSON( "qsc.json", function(data){
         qsc = data;
+    });
+}
+
+// load qsc json
+function loadcpm(){
+    return $.getJSON( "cpm.json", function(data){
+        cpm = data;
     });
 }
 
@@ -575,12 +583,18 @@ function fillArray(value, len) {
 
 
 // testing scripts
-loadyun();
-loadqsc();
+$.when(loadyun(), loadqsc(), loadcpm()).done(function(a1, a2, a3, a4){
+    // the code here will be executed when all four ajax requests resolve.
+    // a1, a2, a3 and a4 are lists of length 3 containing the response text,
+    // status, and jqXHR object for each of the four ajax calls respectively.
+});
+
 for (var i = 0; i < 3; i ++){
 
-    k = random.choice(cpm.CPM.keys())
+    var cpmkeys = Object.keys(cpm);
+    var k = randomselect(cpmkeys);
+
     console.log(k);
-    console.log(write(cpm.CPM[k],[ci.getrandy(3),ci.getrandy(4),ci.getrandy(5),ci.getrandy(6)],-1))
+    console.log(write(cpm[k][0],[ci.getrandy(3),ci.getrandy(4),ci.getrandy(5),ci.getrandy(6)],-1))
     console.log("\n")
 }
