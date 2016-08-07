@@ -1,3 +1,5 @@
+// -*- coding: utf-8 -*-
+
 var yun;
 var qsc;
 var cpm;
@@ -176,7 +178,7 @@ function guesswithpos(zi,pos,dir){
 
 function posinsent(c,ind){
     var start = 0;
-    var end = len(c);
+    var end = c.length;
 
     for (var i = ind; i > 0; i -= _cc){
         if (i == 0 || ispunc(c.substring(i-_cc,i))) {
@@ -186,7 +188,7 @@ function posinsent(c,ind){
     }
 
     for (var i = ind; i < c.length; i += _cc){
-        if (i >= len(c)-1 || ispunc(c.substring(i,i+_cc))) {
+        if (i >= c.length-1 || ispunc(c.substring(i,i+_cc))) {
             end = i;
             break;
         }
@@ -281,8 +283,8 @@ function repeatOK(zi,result,output,pai){
                     return false;
                 }
 
-                var l = poswithstruct(getstruct(pai),Math.floor(len(result)/_cc))[1];
-                if (midsent(Math.floor(l-len(output)/_cc),l)) {
+                var l = poswithstruct(getstruct(pai),Math.floor(result.length/_cc))[1];
+                if (midsent(Math.floor(l-output.length/_cc),l)) {
                     return false;
                 }
 
@@ -293,8 +295,8 @@ function repeatOK(zi,result,output,pai){
     if (result.indexOf(zi) > -1){
         for (var i = 0; i < result.length; i += _cc){
             if (result.substring(i, i+_cc) == zi){
-                var l = poswithstruct(getstruct(pai),Math.floor(len(result)/_cc))[1];
-                if ((! (i == len(result)-_cc && Math.floor(l-len(output)/_cc) == 0)) || Math.floor((len(result)-i)/_cc)>20){
+                var l = poswithstruct(getstruct(pai),Math.floor(result.length/_cc))[1];
+                if ((! (i == result.length-_cc && Math.floor(l-output.length/_cc) == 0)) || Math.floor((result.length-i)/_cc)>20){
                     return false;
                 }
             }
@@ -336,7 +338,7 @@ function mark(pai,ci){
     }
         
     np = np.slice(0,i);
-    np = np.join();
+    np = np.join("");
 
     if (np.indexOf("*") > -1){
         var rep = np.split("*")[0].split(".")[-1];
@@ -391,14 +393,16 @@ function write(pai,ys,dir){
     function writeci(pai, col, strict){
         // set up default value for strict
         strict = typeof strict !== 'undefined' ? strict : true;
-        
+        console.log(col);
+        console.log(mark(PA,output.join("")));
+
         var cmp_tmp = pai.length;
         if (dir != 1){
             cmp_tmp = -1;
         }
         
         if (col == cmp_tmp){
-            return output.join();
+            return output.join("");
         }
         else if (output[col] != ""){
             return writeci(pai,col+dir);
@@ -450,7 +454,7 @@ function write(pai,ys,dir){
 
             for (var j = 0; j < Math.min(x.length, resultlimit); j ++){
 
-                if ((!strict) || (isOK(pai,x[j],col,yg[0],usedyg) && repeatOK(x[j],result,output.join(),PA))){
+                if ((!strict) || (isOK(pai,x[j],col,yg[0],usedyg) && repeatOK(x[j],result,output.join(""),PA))){
                     trial[col] += 1;
                     if (dir == 1){
 
@@ -494,7 +498,7 @@ function write(pai,ys,dir){
             var s = s_list[i];
             output = fillArray("", s.length);
             trial = fillArray(0,s.length);
-            nl = writeci(s,len(s)-1);
+            nl = writeci(s,s.length-1);
             if (nl == null){
                 return ""
             }
@@ -527,8 +531,9 @@ function write(pai,ys,dir){
 // 随机选择韵脚
 function getrandy(n,bounds){
     bounds = typeof bounds !== 'undefined' ? bounds : [20,1000];
-    var ze = yun["上"]+yun["去"]+yun["入"];
-    var ping = yun["平"]
+    var ze = yun["上"].concat(yun["去"]).concat(yun["入"]);
+    var ping = yun["平"];
+
     var pick = ""
     while (pick == "" || lookup(pick)[1].length <bounds[0] || lookup(pick)[1].length >bounds[1]){
 
@@ -584,17 +589,14 @@ function fillArray(value, len) {
 
 // testing scripts
 $.when(loadyun(), loadqsc(), loadcpm()).done(function(a1, a2, a3, a4){
-    // the code here will be executed when all four ajax requests resolve.
-    // a1, a2, a3 and a4 are lists of length 3 containing the response text,
-    // status, and jqXHR object for each of the four ajax calls respectively.
+    for (var i = 0; i < 3; i ++){
+
+        var cpmkeys = Object.keys(cpm);
+        var k = randomselect(cpmkeys);
+
+        console.log(k);
+        console.log(write(cpm[k][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1))
+        console.log("\n")
+    }
 });
 
-for (var i = 0; i < 3; i ++){
-
-    var cpmkeys = Object.keys(cpm);
-    var k = randomselect(cpmkeys);
-
-    console.log(k);
-    console.log(write(cpm[k][0],[ci.getrandy(3),ci.getrandy(4),ci.getrandy(5),ci.getrandy(6)],-1))
-    console.log("\n")
-}
