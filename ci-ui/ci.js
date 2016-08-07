@@ -406,23 +406,29 @@ function write(pai,ys,dir){
     var usedyg = [];
     var trial = [];
     var PA;
-
+    var solution
+    
     // backtrack part
     function writeci(pai, col, strict){
+      
         // flip 一开始设计的时候从 -1 到 -2
         // -1 是开始，-2是结束
         // 而用percentage的话0是开始，1是结束
         // 所以-percentage - 1 就map到flip
+        function GGG(){
         flip = -mark(PA, result + output.join("")).length / PA.length - 1;
-        console.log(flip);
-        // drawProgress();
-        console.log("column count", col);
+        //console.log(flip);
+        //drawProgress();
+        //console.log("column count", col);
+        //window.setTimeout(function(){document.getElementById("p").innerHTML = ""+col},1)
+        //document.getElementById("p").innerHTML = ""+col
+
         // set up default value for strict
         strict = typeof strict !== 'undefined' ? strict : true;
         // console.log("PA", PA);
         var x;
         // console.log("col", col);
-        // console.log("markPA", mark(PA,output.join("")));
+        //console.log("os", mark(PA,output.join("")));
 
         var cmp_tmp = pai.length;
         if (dir != 1){
@@ -431,11 +437,11 @@ function write(pai,ys,dir){
         
         if (col == cmp_tmp){
             // console.log("accidental return via dir", output);
-            return output.join("");
+            solution = output.join("");
         }
         else if (output[col] != ""){
             // console.log("accidental return via col");
-            return writeci(pai,col+dir);
+            solution =  writeci(pai,col+dir);
         } else {
             // console.log("column count 2", col);
             if (parseInt(pai[col]) >= 3){
@@ -483,7 +489,7 @@ function write(pai,ys,dir){
 
                 x = x.slice(0, Math.min(x.length,resultlimit));
             }
-            
+
             x = shuffle(x);
 
             // console.log("x:",x);
@@ -508,9 +514,12 @@ function write(pai,ys,dir){
                     }       
                     output[col] = x[j];
                     // console.log("output",output[output.length-1]);
-                    var solution = writeci(pai,col+dir,strict);
+                    //var solution = writeci(pai,col+dir,strict);
+                    writeci(pai,col+dir,strict);
+                    //window.setTimeout("writeci(pai,col+dir,strict)",1)
                     if (solution != undefined){
-                        return solution;
+                        //return solution;
+                        return;
                     }
 
                     if (parseInt(pai[col])>= 3 &&  (usedyg.indexOf(x[j]) > -1)){
@@ -522,8 +531,12 @@ function write(pai,ys,dir){
                     
                 }
             }
-            return undefined;
+            solution = undefined;
         }
+        }
+        //sleep(0).then(GGG)
+        GGG()
+        
     }
     // console.log("PAI", pai);
     // console.log("PA", PA);
@@ -533,18 +546,32 @@ function write(pai,ys,dir){
     if (dir == -1){
 
         var s_list = splitbyy(pai);
-
-        for (var i = 0; i < s_list.length; i ++){
-            var s = s_list[i];
-            // console.log(s);
-            output = fillArray("", s.length);
-            trial = fillArray(0,s.length);
-            nl = writeci(s,s.length-1);
-            if (nl == undefined){
-                return ""
-            }
-            result += nl;
+        var i = 0
+        var id
+        FFF = function(){            
+          var s = s_list[i];
+          // console.log(s);
+          output = fillArray("", s.length);
+          trial = fillArray(0,s.length);
+          writeci(s,s.length-1);
+          nl = solution
+          if (nl == undefined){
+              return ""
+          }
+          result += nl;
+          print(result)
+          i += 1
+          if (i < s_list.length){
+            //FFF
+            window.setTimeout(FFF,1)
+          }else{
+            //print(mark(pai, result))
+            C = mark(pai, result)
+            return mark(pai, result);
+          }
         }
+        window.setTimeout(FFF,1)
+        
 
     } else if (dir == 1){
         trial = fillArray(0,unmark(pai).length);
@@ -635,12 +662,13 @@ String.prototype.replaceAll = function(search, replacement) {
     var target = this;
     return target.split(search).join(replacement);
 };
-
-function updateProgressBar(){
-    document.getElementById(barid).innerHTML=flip;
+function sleep (time) {
+	return new Promise(function(resolve){ setTimeout(resolve, time)});
 }
 
+
 // testing scripts
+/*
 $.when(loadyun(), loadqsc(), loadcpm()).done(function(a1, a2, a3, a4){
     for (var i = 0; i < 1; i ++){
 
@@ -659,4 +687,4 @@ $.when(loadyun(), loadqsc(), loadcpm()).done(function(a1, a2, a3, a4){
         console.log('Execution time: ',time);
     }
 });
-
+*/

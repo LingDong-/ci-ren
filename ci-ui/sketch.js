@@ -12,10 +12,12 @@ var tn = 0
 var slicer = 0
 var bgoto = -1
 var trans = 0
+var scroller = 0
 var cpm = {}
 var yun = {};
 var qsc = {};
 var progIntID;
+var K = "";
 
 function preload() {
   icon[0] = loadImage("assets/ciren1.png");
@@ -198,12 +200,13 @@ function cancelbutton(x,y,er,tr,col1){
 }
 
 
-function scrollbutton(x,y,er,tr,col1){
+function scrollRbutton(x,y,er,tr,col1){
   if (col1 === undefined){col1=color(153,146,142)}
   var sw = 1
   if (dist(mouseX,mouseY,x,y) <= er){
     //col1 = color(83,86,82)
     sw = 1.5
+    scroller += 1
   }
   noFill()
   stroke(col1)
@@ -212,11 +215,33 @@ function scrollbutton(x,y,er,tr,col1){
   stroke(col1)
   strokeWeight(sw)
   noFill()
-  line(x-tr,y-tr,x+tr,y+tr)
-  line(x+tr,y-tr,x-tr,y+tr)
+  line(x-tr*0.4,y-tr,x+tr*0.6,y)
+  line(x-tr*0.4,y+tr,x+tr*0.6,y)
     
   
 }
+
+function scrollLbutton(x,y,er,tr,col1){
+  if (col1 === undefined){col1=color(153,146,142)}
+  var sw = 1
+  if (dist(mouseX,mouseY,x,y) <= er){
+    //col1 = color(83,86,82)
+    sw = 1.5
+    scroller -= 1
+  }
+  noFill()
+  stroke(col1)
+  strokeWeight(sw)
+  ellipse(x,y,er*2,er*2);
+  stroke(col1)
+  strokeWeight(sw)
+  noFill()
+  line(x+tr*0.4,y-tr,x-tr*0.6,y)
+  line(x+tr*0.4,y+tr,x-tr*0.6,y)
+    
+  
+}
+
 
 function transtext(tn1,tn2){
   var tn = tn1
@@ -286,8 +311,10 @@ function draw() {
       state = 2
       console.log("write poem");
       // progIntID = window.setInterval(drawProgress, 0.1);
-      // noLoop();
+       //noLoop();
+      
       C = writePoem();
+      print(C)
     }
     //print(flip)
     var im = 0
@@ -308,7 +335,7 @@ function draw() {
     // redraw();
     
   }else if (state == 2){
-    // drawProgress();
+     drawProgress();
       
   }else if (state == 3){
     if (flip > -200){
@@ -331,11 +358,12 @@ function draw() {
     fill(93,86,82,-flip*5)
     noStroke()
     textFont(font[2],36)
-    text(C.split("\n").slice(0,1).join("\n"),width/2,height/2-150)
+    //print(C)
+    text((K+"\n"+C).split("\n").slice(0,1).join("\n"),width/2,height/2-150)
     textFont(font[1],24)
     textLeading(50);
     //print(flip)
-    text(C.split("\n").slice(1).join("\n"),width/2,height/2-60)
+    text((K+"\n"+C).split("\n").slice(1).join("\n"),width/2,height/2-60)
     
     
     replaybutton(width/2-120,min(height/2+150-(flip*4+100)/4,height/2+150),24,11,color(153,146,142,-flip*2))
@@ -350,6 +378,8 @@ function draw() {
       text(cpms[i].split("").join("\n"),50*i+flip,100)
       flip -= 0.1
     }
+    scrollLbutton(width/2-50,height/2+150,24,11)
+    scrollRbutton(width/2+50,height/2+150,24,11)
     
   }
   
@@ -420,13 +450,13 @@ function mousePressed() {
 }
 
 function writePoem(){
-  // var cpmkeys = Object.keys(cpm);
+  var cpmkeys = Object.keys(cpm);
   // var k = randomselect(cpmkeys);
-  var k = "十六字令";
+  K = randomselect(cpmkeys);//"浣溪沙";
   var start = new Date().getTime();
 
-  console.log(k);
-  var poem = k + '\n' + write(cpm[k][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1);
+  console.log(K);
+  var poem = K + '\n' + write(cpm[K][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1);
   // console.log(poem);
   // console.log("\n");
 
@@ -437,9 +467,9 @@ function writePoem(){
 }
 
 function drawProgress(){
-  background(0,0,0)
+  //background(0,0,0)
 
-  console.log("flip", flip);
+  //console.log("flip", flip);
   if (flip > -2){
       // flip -= 0.01;
     }
@@ -453,7 +483,7 @@ function drawProgress(){
     slicer = 0
   }
     // update poem
-    print(iscale);
+    //print(iscale);
     image(icon[0], width/2-iscale/2, height/2-iscale/2-120,dWidth=iscale,dHeight=iscale);
     
     image(icon[3],sx=0,sy=0,sWidth = 256,sHeight=256*(flip+2),
