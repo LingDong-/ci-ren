@@ -10,6 +10,7 @@ var ctxt = mtxt[0]
 var tn = 0
 var slicer = 0
 var bgoto = -1
+var trans = 0
 function preload() {
   icon[0] = loadImage("assets/ciren1.png");
   icon[1] = loadImage("assets/ciren2.png");
@@ -220,8 +221,13 @@ function draw() {
     drawmt()
     image(icon[0], width/2-iscale/2, height/2-iscale/2-120+flip,dWidth=iscale,dHeight=iscale); 
     background(245,244,243,min(255,-flip*10))
-
+    fill(252,251,249)
+    var w = 800
+    var h = 300
+    stroke(240,237,234)
+    rect(width/2-w/2,height/2-120-h/2,w,h)
   }
+  
   //print(bgoto)
 }
 
@@ -229,11 +235,43 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
+function smoothtrans(n,mf){
+  var iid = window.setInterval(f,0.1)
+  function f(){
+    background(245,244,243,255-(0.5*cos(trans*2*PI)+0.5)*255)
+    //noLoop()
+    //rect(0,0,width,height)
+    trans = trans + 0.02
+    //print(trans)
+    if (trans > 0.5){
+      //loop()
+      //print("yo")
+      state = n
+      mf()
+    }
+    if (trans > 0.6){
+      //noLoop()
+    }
+    if (trans >= 1){
+      window.clearInterval(iid)
+      //loop()
+    }
+  }
+}
+
 function mousePressed() {
   
   if (bgoto != -1){
-    state = bgoto
+    
+    if (bgoto == 0){
+      trans = 0
+      smoothtrans(0,function(){counter = 0;flip=0;ctxt=mtxt[0];tn=0;slicer=0})
+
+    }else{
+      state = bgoto
+    }
     bgoto = -1
+    
   }
   /*
   if (state == 0) {
