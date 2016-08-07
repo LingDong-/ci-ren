@@ -30,14 +30,14 @@ var Poem = {title : "", author : "", intro : "", content: "", prop: 1}
 
 // load yun json
 function loadyun(){
-    $.getJSON( "ajax/yun.json", function(data){
+    $.getJSON( "yun.json", function(data){
         yun = data;
     });
 }
 
 // load qsc json
 function loadqsc(){
-    $.getJSON( "ajax/qsc.json", function(data){
+    $.getJSON( "qsc.json", function(data){
         qsc = data;
     });
 }
@@ -571,4 +571,16 @@ function fillArray(value, len) {
   while (a.length * 2 <= len) a = a.concat(a);
   if (a.length < len) a = a.concat(a.slice(0, len - a.length));
   return a;
+}
+
+
+// testing scripts
+loadyun();
+loadqsc();
+for (var i = 0; i < 3; i ++){
+
+    k = random.choice(cpm.CPM.keys())
+    console.log(k);
+    console.log(write(cpm.CPM[k],[ci.getrandy(3),ci.getrandy(4),ci.getrandy(5),ci.getrandy(6)],-1))
+    console.log("\n")
 }
