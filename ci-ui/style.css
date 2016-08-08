@@ -15,17 +15,24 @@ body {
   align-items: center;
 }
 
-.copybutton {
+#copybutton {
     background-color: Transparent;
     background-repeat:no-repeat;
     border: none;
-    cursor:pointer;
+    cursor:default;
     overflow: hidden;
     outline:none;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
+    display:none;
 }
 
 #poem {
+	/*display: none;*/
+	opacity:0;
+	font-size: 0;
+}
+
+.poem-textarea {
 	display: none;
 }
