@@ -52,7 +52,7 @@ function setup() {
   canvas = createCanvas(Math.min(2000,windowWidth), windowHeight)
   canvas.position(0, 0);
   nav = createDiv('<ul>\
-      <li><a href="/collection">Back</a></li>\
+      <li><a href="/collection">My Collection</a></li>\
       <li><a href="https://github.com/LingDong-/ci-ren">Settings</a></li>\
     </ul>')
   nav.position(windowWidth-270,24);
@@ -104,7 +104,7 @@ function replaybutton(x,y,er,tr, col1){
     //col1 = color(83,86,82)
     sw = 1.5
     
-    bgoto = 1
+    bgoto = 0
   }
   noFill()
   stroke(col1)
