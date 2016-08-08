@@ -411,7 +411,7 @@ function write(pai,ys,dir){
     
     // backtrack part
     function writeci(pai, col, strict){
-      
+        
         // flip 一开始设计的时候从 -1 到 -2
         // -1 是开始，-2是结束
         // 而用percentage的话0是开始，1是结束
@@ -563,14 +563,15 @@ function write(pai,ys,dir){
           print(result)
           i += 1
           if (i < s_list.length){
-            //FFF
+            //FFF()
             window.setTimeout(FFF,1)
           }else{
-            //print(mark(pai, result))
+            print(mark(pai, result))
             C = mark(pai, result)
             return mark(pai, result);
           }
         }
+        //FFF()
         window.setTimeout(FFF,1)
         
 

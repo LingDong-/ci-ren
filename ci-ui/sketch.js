@@ -18,8 +18,13 @@ var yun = {};
 var qsc = {};
 var progIntID;
 var K = "";
+
 var htmlCopyBtn;
 var onCopyBtn = false;
+
+var mousefire = 0
+var currentCPM = "随机";
+var rectcursx = 0
 
 function preload() {
   icon[0] = loadImage("assets/ciren1.png");
@@ -161,7 +166,24 @@ function addbutton(x,y,er,tr, col1){
   line(x,y-tr,x,y+tr)
 }
  
-
+function okbutton(x,y,er,tr,col1){
+  if (col1 === undefined){col1=color(153,146,142)}
+  var sw = 1
+  if (dist(mouseX,mouseY,x,y) <= er){
+    //col1 = color(83,86,82)
+    sw = 1.5
+    bgoto = 0
+  }
+  noFill()
+  stroke(col1)
+  strokeWeight(sw)
+  ellipse(x,y,er*2,er*2);
+  stroke(col1)
+  strokeWeight(sw)
+  noFill()
+  line(x-tr,y,x-tr*0.2,y+tr)
+  line(x-tr*0.2,y+tr,x+tr,y-tr)  
+}
 
 function infobutton(x,y,er,tr,col1){
   if (col1 === undefined){col1=color(153,146,142)}
@@ -190,7 +212,9 @@ function optionbutton(x,y,er,tr,col1){
   if (dist(mouseX,mouseY,x,y) <= er){
     //col1 = color(83,86,82)
     sw = 1.5
+    flip = 0
     bgoto = 4
+    
   }
   noFill()
   stroke(col1)
@@ -234,7 +258,7 @@ function scrollRbutton(x,y,er,tr,col1){
   if (dist(mouseX,mouseY,x,y) <= er){
     //col1 = color(83,86,82)
     sw = 1.5
-    scroller += 1
+    scroller = max(-4,-abs(scroller-0.1)*1.3)
   }
   noFill()
   stroke(col1)
@@ -255,7 +279,7 @@ function scrollLbutton(x,y,er,tr,col1){
   if (dist(mouseX,mouseY,x,y) <= er){
     //col1 = color(83,86,82)
     sw = 1.5
-    scroller -= 1
+    scroller =min(4,abs(scroller+0.1)*1.3)
   }
   noFill()
   stroke(col1)
@@ -341,11 +365,16 @@ function draw() {
       // progIntID = window.setInterval(drawProgress, 0.1);
        //noLoop();
       
+<<<<<<< HEAD
       C = writePoem();
       print(C)
       // insert C to the #poem element
       
       
+=======
+      writePoem();
+      //print(C)
+>>>>>>> 893ffea2425497be713b75ea2ab4b93dc90886f0
     }
     //print(flip)
     var im = 0
@@ -404,20 +433,62 @@ function draw() {
     copybutton(width/2,  min(height/2+150-(flip*4+200)/4,height/2+150),24,10,color(153,146,142,-flip*2))
     addbutton(width/2+120,min(height/2+150-(flip*4+300)/4,height/2+150),24,11,color(153,146,142,-flip*2))
   }else if (state == 4){
-    var cpms = Object.keys(cpm)
+    
+    
+    fill(93,86,82)
+    noStroke()
+    textFont(font[1],40)
+    text("词\n牌\n",width-50,max(70,height/2-170))
+    var cpms = ["随机"].concat(Object.keys(cpm))
     for (var i = 0; i < cpms.length; i++){
       fill(93,86,82)
       noStroke()
+      textFont(font[1],40)
       textFont(font[2],24)
-      text(cpms[i].split("").join("\n"),50*i+flip,100)
-      flip -= 0.1
+      //cpm[cpms[i]][0].length+"\n"+
+      text(cpms[i].split("").join("\n"),width-100-50*i+flip,max(60,height/2-180))
+      
+      noFill()
+      stroke(193,186,182)
+      
+      
+      if (mouseX > width-114-50*i+flip && mouseX < width-114-50*i+flip+50 &&
+        mouseY > max(60,height/2-210) && mouseY < max(60,height/2-210)+200){
+          //rect(width-114-50*i+flip,max(60,height/2-210),50,200)
+          rectcursx = rectcursx*0.8+i*0.2
+          if (mousefire == 1){
+            currentCPM = cpms[i]
+            mousefire = 0
+          }
+        }
+      
     }
-    scrollLbutton(width/2-50,height/2+150,24,11)
-    scrollRbutton(width/2+50,height/2+150,24,11)
+    if ( mouseY > max(60,height/2-210) && mouseY < max(60,height/2-210)+200){
+      rect(width-114-50*rectcursx+flip,max(60,height/2-210),50,200)
+    }
+    stroke(93,86,82)
+    strokeWeight(1)
+    noFill()
+    
+    rect(width-114-50*cpms.indexOf(currentCPM)+flip,max(60,height/2-210),50,200)
+
+    scrollLbutton(width/2-120,height/2+150,24,11)
+    okbutton(width/2+120,height/2+150,24,10,color(153,146,142,trsp))
+    scrollRbutton(width/2,height/2+150,24,11)
+    flip = flip + scroller
+    //console.log(flip,cpms.length*50)
+    if (flip < 0){
+      flip = flip*0.9
+    }
+    if (flip > cpms.length*50-width+100){
+      flip = flip*0.9+(cpms.length*50-width+100)*0.1
+    }
+    scroller = scroller/1.3
     
   }
   
   //print(bgoto)
+  mousefire = 0
 }
 
 function windowResized() {
@@ -430,7 +501,7 @@ function smoothtrans(n,mf){
     //background(245,244,243,255-(0.5*cos(trans*2*PI)+0.5)*255)
     //noLoop()
     //rect(0,0,width,height)
-    trans = trans + 0.02
+    trans = trans + 0.5
     //print(trans)
     if (trans > 0.5){
       //loop()
@@ -450,7 +521,7 @@ function smoothtrans(n,mf){
 
 function mousePressed() {
   // redraw(5);
-  
+  mousefire = 1
   if (bgoto != -1){
     
     if (bgoto == 0){
@@ -486,28 +557,55 @@ function mousePressed() {
   }
 }
 
+
 function writePoem(){
   var cpmkeys = Object.keys(cpm);
   // var k = randomselect(cpmkeys);
-  K = randomselect(cpmkeys);//"浣溪沙";
-  K = "如梦令"
-  var start = new Date().getTime();
+  console.log(currentCPM)
+  if (currentCPM == "随机"){
+    K = randomselect(cpmkeys);//"浣溪沙";
+  }else{
+    K = currentCPM
+  }
+  //var start = new Date().getTime();
 
   console.log(K);
-  var poem = K + '\n' + write(cpm[K][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1);
+  /*
+  var promise1 = new Promise(function(resolve, reject) {
+    // do a thing, possibly async, then…
+    write(cpm[K][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1)
+    print("bababa")
+
+    resolve("haha");
+
+  });
+  var promise2 = new Promise(function(resolve, reject) {
+    drawProgress()
+    print("gogogo")
+    resolve("hoho")
+  })
+  */
+
+  //p = new Promise(function(resolve){ write(cpm[K][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1)})
+  //p = new Promise(function(resolve){ for(var i= 0;i<1000;i++){print(i)}; return true})
+  write(cpm[K][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1);
+  //promise.then(function(result){print("OK!")})
+  //Promise.all(promise2,promise1).then(function(result){print("OK!")})
+  //print(q)
+  //var poem = K + '\n' + write(cpm[K][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1);
   // console.log(poem);
   // console.log("\n");
   
 
-  var end = new Date().getTime();
-  var time = end - start;
-  console.log('Execution time: ',time);
-  return poem;
+  //var end = new Date().getTime();
+  //var time = end - start;
+  //console.log('Execution time: ',time);
+  //return poem;
 }
 
 function drawProgress(){
   //background(0,0,0)
-
+  
   //console.log("flip", flip);
   if (flip > -2){
       // flip -= 0.01;
