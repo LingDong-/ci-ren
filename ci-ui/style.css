@@ -14,3 +14,18 @@ body {
   /* This centers our sketch vertically. */
   align-items: center;
 }
+
+.copybutton {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}
+
+#poem {
+	display: none;
+}

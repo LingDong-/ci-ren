@@ -355,7 +355,8 @@ function mark(pai,ci){
     np = np.join("");
 
     if (np.indexOf("*") > -1){
-        var rep = np.split("*")[0].split(".")[-1];
+        var rep = np.split("*")[0].split(".")
+        rep = rep[rep.length - 1];
         np = np.replaceAll("*",rep);
     }
         
