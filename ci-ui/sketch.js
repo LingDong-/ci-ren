@@ -379,14 +379,22 @@ function draw() {
     
     fill(93,86,82,-flip*5)
     noStroke()
-    textFont(font[2],36)
-    //print(C)
-    text((K+"\n"+C).split("\n").slice(0,1).join("\n"),width/2,height/2-150)
+
     textFont(font[1],24)
     textLeading(50);
     //print(flip)
-    text((K+"\n"+C).split("\n").slice(1).join("\n"),width/2,height/2-60)
-    
+    var nc = (K+"\n"+C).split("\n").slice(1).join("\n").split("\n")
+    for (var i = 0; i < nc.length; i++){
+      if (textWidth(nc[i])>width-20){
+        nc[i] = nc[i].split("。").join("。\n").slice(0,-1)
+        
+      }
+    }
+    nc = nc.join("\n").split("\n").join("\n")
+    text(nc,width/2,height/2+70-50*nc.split("\n").length)
+    textFont(font[2],36)
+    //print(C)
+    text(K,width/2,height/2-50*nc.split("\n").length-20)    
     
     replaybutton(width/2-120,min(height/2+150-(flip*4+100)/4,height/2+150),24,11,color(153,146,142,-flip*2))
     copybutton(width/2,  min(height/2+150-(flip*4+200)/4,height/2+150),24,10,color(153,146,142,-flip*2))
