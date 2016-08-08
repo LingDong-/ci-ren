@@ -318,6 +318,7 @@ function transtext(tn1,tn2){
 function draw() {
   //createCanvas(windowWidth, windowHeight)
   bgoto = -1
+  onCopyBtn = false
   
   //text("词人",10,10)
   background(245,244,243)
@@ -414,7 +415,7 @@ function draw() {
     textFont(font[1],24)
     textLeading(50);
     //print(flip)
-
+    
     var nc = (K+"\n"+C).split("\n").slice(1).join("\n").split("\n")
     for (var i = 0; i < nc.length; i++){
       if (textWidth(nc[i])>width-20){
@@ -423,19 +424,21 @@ function draw() {
       }
     }
     nc = nc.join("\n").split("\n").join("\n")
-    text(nc,width/2,height/2+70-50*nc.split("\n").length)
+    
+    var hbase = max(100+50*nc.split("\n").length,height/2)
+    text(nc,width/2,hbase+70-50*nc.split("\n").length)
     textFont(font[2],36)
     //print(C)
-    text(K,width/2,height/2-50*nc.split("\n").length-20)    
+    text(K,width/2,hbase-50*nc.split("\n").length-20)    
     
 
     // add poem div
     var poemDiv = document.getElementById('poem');
     poemDiv.innerHTML = C;
 
-    replaybutton(width/2-120,min(height/2+150-(flip*4+100)/4,height/2+150),24,11,color(153,146,142,-flip*2))
-    copybutton(width/2,  min(height/2+150-(flip*4+200)/4,height/2+150),24,10,color(153,146,142,-flip*2))
-    addbutton(width/2+120,min(height/2+150-(flip*4+300)/4,height/2+150),24,11,color(153,146,142,-flip*2))
+    replaybutton(width/2-120,min(hbase+150-(flip*4+100)/4,hbase+150),24,11,color(153,146,142,-flip*2))
+    copybutton(width/2,  min(hbase+150-(flip*4+200)/4,hbase+150),24,10,color(153,146,142,-flip*2))
+    addbutton(width/2+120,min(hbase+150-(flip*4+300)/4,hbase+150),24,11,color(153,146,142,-flip*2))
   }else if (state == 4){
     
     
@@ -493,6 +496,7 @@ function draw() {
   
   //print(bgoto)
   mousefire = 0
+  
 }
 
 function windowResized() {
@@ -545,6 +549,7 @@ function mousePressed() {
     }
     bgoto = -1
     
+    
   }
   /*
   if (state == 0) {
@@ -558,6 +563,7 @@ function mousePressed() {
   */
   if (onCopyBtn){
     $("#copybutton").click();    
+    console.log("Press Cmd-C to Copy.")
   }
 }
 
