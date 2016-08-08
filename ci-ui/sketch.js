@@ -28,7 +28,8 @@ var onCopyBtn = false;
 var mousefire = 0
 var currentCPM = "随机";
 var rectcursx = 0
-
+var canvas;
+var nav
 function preload() {
   icon[0] = loadImage("assets/ciren1.png");
   icon[1] = loadImage("assets/ciren2.png");
@@ -47,7 +48,18 @@ function preload() {
 
 function setup() {
 
-  createCanvas(Math.min(2000,windowWidth), windowHeight)
+  canvas = createCanvas(Math.min(2000,windowWidth), windowHeight-100)
+  canvas.position(0, 100);
+  nav = createDiv('<ul>\
+      <li><a class="active" href="#home">Home</a></li>\
+      <li><a href="#news">News</a></li>\
+      <li><a href="#contact">Contact</a></li>\
+      <li><a href="#about">About</a></li>\
+    </ul>')
+  nav.position(0,0);
+  
+  
+  
   background(245,244,243)
   new Clipboard('.btn');
   cpms = ["随机"].concat(Object.keys(cpm))
@@ -590,6 +602,8 @@ function mousePressed() {
     console.log("Press Cmd-C to Copy.")
     if ( Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0){
       msg = "Press cmd-c now to copy."
+    }else{
+      msg = "Copied to clipboard."
     }
   }
 }

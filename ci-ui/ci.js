@@ -547,6 +547,7 @@ function write(pai,ys,dir){
     if (dir == -1){
 
         var s_list = splitbyy(pai);
+        //print(s_list)
         var i = 0
         var id
         FFF = function(){            
@@ -568,6 +569,7 @@ function write(pai,ys,dir){
           }else{
             print(mark(pai, result))
             C = mark(pai, result)
+            flip = -2
             return mark(pai, result);
           }
         }
