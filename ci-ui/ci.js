@@ -558,6 +558,7 @@ function write(pai,ys,dir){
           writeci(s,s.length-1);
           nl = solution
           if (nl == undefined){
+              msg = "Failure. Press 'x' and try again."
               return ""
           }
           result += nl;

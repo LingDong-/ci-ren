@@ -52,7 +52,7 @@ function setup() {
   canvas = createCanvas(Math.min(2000,windowWidth), windowHeight)
   canvas.position(0, 0);
   nav = createDiv('<ul>\
-      <li><a href="/collection">My Collection</a></li>\
+      <li><a href="/collection">Back</a></li>\
       <li><a href="https://github.com/LingDong-/ci-ren">Settings</a></li>\
     </ul>')
   nav.position(windowWidth-270,24);
