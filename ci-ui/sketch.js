@@ -453,6 +453,7 @@ function writePoem(){
   var cpmkeys = Object.keys(cpm);
   // var k = randomselect(cpmkeys);
   K = randomselect(cpmkeys);//"浣溪沙";
+  K = "如梦令"
   var start = new Date().getTime();
 
   console.log(K);
