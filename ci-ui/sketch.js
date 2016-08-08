@@ -14,10 +14,13 @@ var bgoto = -1
 var trans = 0
 var scroller = 0
 var cpm = {}
+var cpms = []
 var yun = {};
 var qsc = {};
 var progIntID;
 var K = "";
+var msg = ""
+var msgtimer = 0
 
 var htmlCopyBtn;
 var onCopyBtn = false;
@@ -39,6 +42,7 @@ function preload() {
   cpm = loadJSON('cpm.json');
   qsc = loadJSON('qsc.json');
   yun = loadJSON('yun.json');
+  
 }
 
 function setup() {
@@ -46,6 +50,7 @@ function setup() {
   createCanvas(Math.min(2000,windowWidth), windowHeight)
   background(245,244,243)
   new Clipboard('.btn');
+  cpms = ["随机"].concat(Object.keys(cpm))
   // noLoop();
 }
 
@@ -258,7 +263,7 @@ function scrollRbutton(x,y,er,tr,col1){
   if (dist(mouseX,mouseY,x,y) <= er){
     //col1 = color(83,86,82)
     sw = 1.5
-    scroller = max(-4,-abs(scroller-0.1)*1.3)
+    scroller = max(-8,-abs(scroller-0.1)*1.5)
   }
   noFill()
   stroke(col1)
@@ -279,7 +284,7 @@ function scrollLbutton(x,y,er,tr,col1){
   if (dist(mouseX,mouseY,x,y) <= er){
     //col1 = color(83,86,82)
     sw = 1.5
-    scroller =min(4,abs(scroller+0.1)*1.3)
+    scroller =min(8,abs(scroller+0.1)*1.5)
   }
   noFill()
   stroke(col1)
@@ -446,7 +451,7 @@ function draw() {
     noStroke()
     textFont(font[1],40)
     text("词\n牌\n",width-50,max(70,height/2-170))
-    var cpms = ["随机"].concat(Object.keys(cpm))
+    
     for (var i = 0; i < cpms.length; i++){
       fill(93,86,82)
       noStroke()
@@ -493,6 +498,25 @@ function draw() {
     scroller = scroller/1.3
     
   }
+  
+  if (msg != ""){
+    
+    
+    noStroke()
+    textFont(font[0],20)
+    fill(103,98,96,min(255,400*sin(msgtimer*PI/100)))
+    rect(width/2-textWidth(msg)/2-10,height-100-20,textWidth(msg)+20,28)
+    fill(246,245,244)
+    text(msg,width/2,height-100)
+    msgtimer = msgtimer + 1
+    if (msgtimer == 100){
+      msg = ""
+      msgtimer = 0
+    }
+    
+  }
+  
+  
   
   //print(bgoto)
   mousefire = 0
@@ -564,6 +588,9 @@ function mousePressed() {
   if (onCopyBtn){
     $("#copybutton").click();    
     console.log("Press Cmd-C to Copy.")
+    if ( Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0){
+      msg = "Press cmd-c now to copy."
+    }
   }
 }
 
