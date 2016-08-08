@@ -24,6 +24,7 @@ var msgtimer = 0
 
 var htmlCopyBtn;
 var onCopyBtn = false;
+var onAddBtn = false;
 
 var mousefire = 0
 var currentCPM = "随机";
@@ -48,15 +49,13 @@ function preload() {
 
 function setup() {
 
-  canvas = createCanvas(Math.min(2000,windowWidth), windowHeight-100)
-  canvas.position(0, 100);
+  canvas = createCanvas(Math.min(2000,windowWidth), windowHeight)
+  canvas.position(0, 0);
   nav = createDiv('<ul>\
-      <li><a class="active" href="#home">Home</a></li>\
-      <li><a href="#news">News</a></li>\
-      <li><a href="#contact">Contact</a></li>\
-      <li><a href="#about">About</a></li>\
+      <li><a href="/collection">My Collection</a></li>\
+      <li><a href="https://github.com/LingDong-/ci-ren">Settings</a></li>\
     </ul>')
-  nav.position(0,0);
+  nav.position(windowWidth-270,24);
   
   
   
@@ -171,6 +170,7 @@ function addbutton(x,y,er,tr, col1){
   if (dist(mouseX,mouseY,x,y) <= er){
     //col1 = color(83,86,82)
     sw = 1.5
+    onAddBtn = true
   }
   noFill()
   stroke(col1)
@@ -336,6 +336,7 @@ function draw() {
   //createCanvas(windowWidth, windowHeight)
   bgoto = -1
   onCopyBtn = false
+  onAddBtn = false
   
   //text("词人",10,10)
   background(245,244,243)
@@ -536,6 +537,7 @@ function draw() {
 }
 
 function windowResized() {
+  nav.position(windowWidth-270,24);
   resizeCanvas(windowWidth, windowHeight);
 }
 
@@ -605,6 +607,10 @@ function mousePressed() {
     }else{
       msg = "Copied to clipboard."
     }
+  }
+  if (onAddBtn){
+    print(C)
+    window.location.href = '/collection/?'+K+"|"+C.replaceAll("\n","|");
   }
 }
 
