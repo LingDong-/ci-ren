@@ -18,6 +18,8 @@ var yun = {};
 var qsc = {};
 var progIntID;
 var K = "";
+var htmlCopyBtn;
+var onCopyBtn = false;
 
 function preload() {
   icon[0] = loadImage("assets/ciren1.png");
@@ -38,6 +40,7 @@ function setup() {
 
   createCanvas(Math.min(2000,windowWidth), windowHeight)
   background(245,244,243)
+  new Clipboard('.btn');
   // noLoop();
 }
 
@@ -96,11 +99,36 @@ function replaybutton(x,y,er,tr, col1){
 }
 
 function copybutton(x,y,er,tr, col1){
+  if (typeof htmlCopyBtn == 'undefined'){
+    htmlCopyBtn = createButton('copy');
+    htmlCopyBtn.class('btn');
+    htmlCopyBtn.id("copybutton");
+    htmlCopyBtn.attribute("data-clipboard-target", "#poem");
+
+    // var copyBtn = document.querySelector('#copybutton');
+
+    // copyBtn.addEventListener('click', function(event) {
+    
+    // // SelectText('poem');
+    // var poemTextArea = document.querySelector('#poem');
+    // poemTextArea.select();
+    //   try {
+    //     var successful = document.execCommand('copy');
+    //     var msg = successful ? 'successful' : 'unsuccessful';
+    //     console.log('Copying text command was ' + msg);
+    //   } catch (err) {
+    //     console.log('Oops, unable to copy');
+    //   }
+    // });
+  }
   if (col1 === undefined){col1=color(153,146,142)}
   var sw = 1
   if (dist(mouseX,mouseY,x,y) <= er){
     //col1 = color(83,86,82)
     sw = 1.5
+    // click html copy button
+    onCopyBtn = true;
+    
   }
   noFill()
   stroke(col1)
@@ -315,6 +343,9 @@ function draw() {
       
       C = writePoem();
       print(C)
+      // insert C to the #poem element
+      
+      
     }
     //print(flip)
     var im = 0
@@ -365,7 +396,10 @@ function draw() {
     //print(flip)
     text((K+"\n"+C).split("\n").slice(1).join("\n"),width/2,height/2-60)
     
-    
+    // add poem div
+    var poemDiv = document.getElementById('poem');
+    poemDiv.innerHTML = C;
+
     replaybutton(width/2-120,min(height/2+150-(flip*4+100)/4,height/2+150),24,11,color(153,146,142,-flip*2))
     copybutton(width/2,  min(height/2+150-(flip*4+200)/4,height/2+150),24,10,color(153,146,142,-flip*2))
     addbutton(width/2+120,min(height/2+150-(flip*4+300)/4,height/2+150),24,11,color(153,146,142,-flip*2))
@@ -447,6 +481,9 @@ function mousePressed() {
     
   } 
   */
+  if (onCopyBtn){
+    $("#copybutton").click();    
+  }
 }
 
 function writePoem(){
@@ -460,6 +497,7 @@ function writePoem(){
   var poem = K + '\n' + write(cpm[K][0],[getrandy(3),getrandy(4),getrandy(5),getrandy(6)],-1);
   // console.log(poem);
   // console.log("\n");
+  
 
   var end = new Date().getTime();
   var time = end - start;
@@ -493,4 +531,23 @@ function drawProgress(){
     cancelbutton(width/2,height/2+150,24,9)
 
   // redraw();
+}
+
+//http://stackoverflow.com/questions/985272/selecting-text-in-an-element-akin-to-highlighting-with-your-mouse
+function SelectText(element) {
+    var doc = document
+        , text = doc.getElementById(element)
+        , range, selection
+    ;    
+    if (doc.body.createTextRange) {
+        range = document.body.createTextRange();
+        range.moveToElementText(text);
+        range.select();
+    } else if (window.getSelection) {
+        selection = window.getSelection();        
+        range = document.createRange();
+        range.selectNodeContents(text);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
 }
