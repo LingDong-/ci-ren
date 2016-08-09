@@ -1,6 +1,14 @@
 var divs = []
 var nav
 
+// setup for share.js
+// var $config = {
+//   sites : ['weibo','wechat', 'facebook'],
+//   disabled : ['google', 'twitter', 'qzone', 'qq', 'douban']
+// };
+
+// $('.social-share').share($config);
+
 function ispunc(x){
 	return (x=="，" || x=="。" || x=="｀")
 }
@@ -8,7 +16,7 @@ function ispunc(x){
 function setup() {
 	var np = decodeURIComponent(window.location.href.split("?")[1])
 	
-	print(np)
+	console.log(np)
 	/*
 	np = np.split("%")
 	var uc = []
@@ -45,7 +53,8 @@ function setup() {
 	}
 	localStorage.setItem("collection",JSON.stringify(conc))
 	var g = JSON.parse(localStorage.getItem("collection"))
-	print(g)
+	console.log(g)
+  
   	//document.getElementById("poems").innerHTML = g.join("<br>")
 
   	//dbg = createDiv("")
@@ -61,6 +70,7 @@ function setup() {
   	for (var i = 0 ; i<g.length; i++){
   		var pc = []
   		var lc = ""
+      // iterate over each poem
   		for (var j = 0; j<g[i].length;j++){
   			if (g[i][j] == "|"){
 
@@ -68,7 +78,7 @@ function setup() {
   					lc += " "
   				}
   				pc.push(lc)
-  				lc = ""
+  				lc = "";
   			}else if (lc.length>lm){
   				lc = lc + g[i][j]
   				pc.push(lc)
@@ -84,6 +94,7 @@ function setup() {
   			pc.push(lc)
   		}
   		sx += pc.length*40+100
+      
   		for (var j = 0; j< pc.length; j++){
   			var d = createDiv(pc[j].split("").join("<br>"))
   			d.position(sx-j*40,windowHeight*0.1+20)
@@ -96,7 +107,17 @@ function setup() {
   			//d.style("background-image", "url(assets/bg3.png)");
   			divs.push(d)
   		}
-  		
+      // add share buttons at the position of each poem
+      // each line is 39px wide
+      // pc.length is the number of lines per poem
+      var share = createDiv("");
+      console.log(lm);
+      share.position(sx - pc.length / 2 * 39 - 34, lm * 30 + 50);
+      share.class("social-share");
+      share.attribute('data-sites', 'facebook,wechat,weibo')
+      // set description to the poem
+      share.attribute('data-title', "快来看看我用词人(Ci-Ren)写的词："+g[i]);
+
   	}
   	var e = createDiv("<h1>词<br>集</h1>")
   	e.position(sx+100,windowHeight*0.1-20)
