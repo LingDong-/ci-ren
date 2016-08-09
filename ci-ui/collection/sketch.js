@@ -1,14 +1,6 @@
 var divs = []
 var nav
 
-// setup for share.js
-// var $config = {
-//   sites : ['weibo','wechat', 'facebook'],
-//   disabled : ['google', 'twitter', 'qzone', 'qq', 'douban']
-// };
-
-// $('.social-share').share($config);
-
 function ispunc(x){
 	return (x=="，" || x=="。" || x=="｀")
 }
@@ -113,10 +105,25 @@ function setup() {
       var share = createDiv("");
       console.log(lm);
       share.position(sx - pc.length / 2 * 39 - 34, lm * 30 + 50);
+      // share.style("padding","10px 9px")
       share.class("social-share");
+      // share.id("share_btns");
+      // share.attribute('data-initialized', 'true');
+      // var facebook = createA('#','');
+      // facebook.class('social-share-icon icon-facebook')
+      // var wechat = createA('#','');
+      // wechat.class('social-share-icon icon-wechat');
+      // var weibo = createA('#','');
+      // weibo.class('social-share-icon icon-weibo');
+      // share.child(facebook);
+      // share.child(weibo);
+      // share.child(wechat);
+      // share.style('display','block')
+      // share.style('float','left')
+      share.size('150','50');
       share.attribute('data-sites', 'facebook,wechat,weibo')
       // set description to the poem
-      share.attribute('data-title', "快来看看我用词人(Ci-Ren)写的词："+g[i]);
+      share.attribute('data-title', "快来看看我用词人(Ci-Ren)写的词：" + g[i]);
 
   	}
   	var e = createDiv("<h1>词<br>集</h1>")
