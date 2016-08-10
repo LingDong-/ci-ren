@@ -9,7 +9,7 @@ function ispunc(x){
 function setup() {
 	var np = decodeURIComponent(window.location.href.split("?")[1])
   rootURL = window.location.href.split("?")[0];
-  rootURL = rootURL.substring(0,lastIndexOf('/'));
+  rootURL = rootURL.substring(0,rootURL.lastIndexOf('/'));
 	
 	console.log(np)
 	/*
