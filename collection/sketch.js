@@ -1,5 +1,6 @@
 var divs = []
-var nav
+var nav;
+var rootURL = '';
 
 function ispunc(x){
 	return (x=="，" || x=="。" || x=="｀")
@@ -7,6 +8,8 @@ function ispunc(x){
 
 function setup() {
 	var np = decodeURIComponent(window.location.href.split("?")[1])
+  rootURL = window.location.href.split("?")[0];
+  rootURL = rootURL.substring(0,lastIndexOf('/'));
 	
 	console.log(np)
 	/*
@@ -54,7 +57,7 @@ function setup() {
   	//dbg.size(windowWidth*2,windowHeight*0.8)
   	//dbg.position(0,windowHeight*0.1)
   	nav = createDiv('<ul>\
-      <li><a href="/">Back</a></li>\
+      <li><a href="' + rootURL + '">Back</a></li>\
     </ul>')
   	nav.position(120,24);
   	var sx = 0
