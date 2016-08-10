@@ -1,0 +1,50 @@
+/* style.css */
+
+html, body {
+  height: 100%;
+}
+
+
+@font-face {
+    font-family: Longzhao;
+    src: url(assets/Longzhao.ttf);
+}
+
+@font-face {
+    font-family: HelveticaNeue;
+    src: url(assets/HelveticaNeue.otf);
+}
+h1 {
+  font-family: Longzhao;
+  font-size:50px;
+  color:rgba(200,200,200,1);
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color:  rgba(0,0,0, .0);
+}
+
+li {
+    float: left;
+    font-family: "HelveticaNeue";
+    font-size:24px;
+}
+
+li a {
+    display: block;
+    color: rgba(200,200,200,1);
+    text-align: left;
+    padding: 14px 16px;
+    padding-top: 8px; 
+    padding-bottom: 0px; 
+    text-decoration: none;
+}
+
+li a:hover {
+  text-decoration: underline;
+  
+}

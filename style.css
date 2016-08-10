@@ -1,0 +1,72 @@
+/* style.css */
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+
+  /* This centers our sketch horizontally. */
+  justify-content: center;
+
+  /* This centers our sketch vertically. */
+  align-items: center;
+}
+
+@font-face {
+    font-family: HelveticaNeue;
+    src: url(assets/HelveticaNeue.otf);
+}
+
+ ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color:  rgba(0,0,0, .0);
+  }
+  
+  li {
+      float: left;
+      font-family: "HelveticaNeue";
+      font-size:18px;
+  }
+  
+  li a {
+      display: block;
+      color: rgba(103,96,92,1);
+      text-align: left;
+      padding: 14px 16px;
+      padding-top: 8px; 
+      padding-bottom: 0px; 
+      text-decoration: none;
+  }
+  
+  li a:hover {
+    text-decoration: underline;
+    
+  }
+
+#copybutton {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:default;
+    overflow: hidden;
+    outline:none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    display:none;
+}
+
+#poem {
+	/*display: none;*/
+	opacity:0;
+	font-size: 0;
+}
+
+.poem-textarea {
+	display: none;
+}
