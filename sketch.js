@@ -58,7 +58,7 @@ function setup() {
   canvas.position(0, 0);
   var currentURL = window.location.href;
   nav = createDiv('<ul>\
-      <li><a href="' + currentURL + '/collection">My Collection</a></li>\
+      <li><a href="' + currentURL + 'collection">My Collection</a></li>\
       <li><a href="https://github.com/LingDong-/ci-ren">Github</a></li>\
     </ul>')
   nav.position(windowWidth-270,24);
