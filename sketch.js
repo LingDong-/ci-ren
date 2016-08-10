@@ -632,7 +632,7 @@ function mousePressed() {
   }
   if (onAddBtn){
     print(C)
-    window.location.href = '/collection/?'+K+"|"+C.replaceAll("\n","|");
+    window.location.href = rootURL + '/collection/?'+K+"|"+C.replaceAll("\n","|");
   }
 }
 
