@@ -30,7 +30,9 @@ var mousefire = 0
 var currentCPM = "随机";
 var rectcursx = 0
 var canvas;
-var nav
+var nav;
+var info = "";
+
 function preload() {
   icon[0] = loadImage("assets/ciren1.png");
   icon[1] = loadImage("assets/ciren2.png");
@@ -44,7 +46,10 @@ function preload() {
   cpm = loadJSON('cpm.json');
   qsc = loadJSON('qsc.json');
   yun = loadJSON('yun.json');
-  
+  loadStrings('info.md', function(array){
+    info = array.join('\n \n');
+
+  } );
 }
 
 function setup() {
@@ -53,7 +58,7 @@ function setup() {
   canvas.position(0, 0);
   nav = createDiv('<ul>\
       <li><a href="/collection">My Collection</a></li>\
-      <li><a href="https://github.com/LingDong-/ci-ren">Settings</a></li>\
+      <li><a href="https://github.com/LingDong-/ci-ren">Github</a></li>\
     </ul>')
   nav.position(windowWidth-270,24);
   
@@ -208,6 +213,7 @@ function infobutton(x,y,er,tr,col1){
   if (dist(mouseX,mouseY,x,y) <= er){
     //col1 = color(83,86,82)
     sw = 1.5
+    bgoto = 5;
   }
   noFill()
   stroke(col1)
@@ -510,6 +516,19 @@ function draw() {
     }
     scroller = scroller/1.3
     
+    // add info page stuff
+  } else if (state == 5){
+    // add text
+    
+    textFont(font[0],20);
+    fill(100)
+    noStroke()
+    textAlign(CENTER);
+
+    text(info,width/2,height/3-15);
+    // add return button
+    okbutton(width/2,height/2+150,24,10,color(153,146,142,trsp));
+
   }
   
   if (msg != ""){
@@ -568,6 +587,7 @@ function smoothtrans(n,mf){
 function mousePressed() {
   // redraw(5);
   mousefire = 1
+  console.log(state);
   if (bgoto != -1){
     
     if (bgoto == 0){
